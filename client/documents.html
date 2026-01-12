@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документы — Внутренний портал</title>
+
+    <!-- Шрифты -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+    <!-- Общие стили сайта -->
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/documents.css">
+    <script>
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/login';
+    }
+</script>
+</head>
+<body>
+
+<div class="site-container">
+
+    <!-- ===== ШАПКА ===== -->
+    <header class="header">
+        <a href="index.html" class="logo-button">ДЕЛЬТА</a>
+
+        <p class="nav-link nav-title">Внутренний портал</p>
+
+        <div class="header-buttons">
+            <a href="notifications.html" class="action-button">Уведомления</a>
+            <a href="profile.html" class="action-button">Профиль</a>
+        </div>
+    </header>
+
+    <!-- ===== ОСНОВНОЕ СОДЕРЖИМОЕ ===== -->
+    <main class="main-content documents-page">
+
+        <!-- Заголовок страницы -->
+        <section class="documents-section documents-header">
+            <h1 class="section-title documents-title">Документы</h1>
+        </section>
+
+        <!-- СОРТИРОВКА -->
+        <section class="documents-section documents-sorting">
+            <div class="documents-filters">
+
+                <button class="documents-filter active" data-sort="new">Новые</button>
+                <button class="documents-filter inactive" data-sort="name">Имя</button>
+                <button class="documents-filter inactive" data-sort="PDF">PDF</button>
+                <button class="documents-filter inactive" data-sort="DOC">DOC</button>
+                <button class="documents-filter inactive" data-sort="DOCX">DOCX</button>
+                <button class="documents-filter inactive" data-sort="XLS">XLS</button>
+                <button class="documents-filter inactive" data-sort="PNG">PNG</button>
+                <button class="documents-filter inactive" data-sort="JPEG">JPEG</button>
+
+            </div>
+        </section>
+
+        <!-- СЕТКА ДОКУМЕНТОВ -->
+        <section class="documents-section documents-list">
+            <div class="documents-grid" id="documents-grid">
+                <!-- Карточки документов (JS) -->
+            </div>
+        </section>
+
+        <!-- СОЗДАНИЕ ДОКУМЕНТА -->
+        <section class="documents-section documents-create">
+
+            <!-- КНОПКА ОТКРЫТИЯ -->
+            <button
+                id="open-create-form"
+                class="action-button add-document-btn">
+                + Добавить документ
+            </button>
+
+            <!-- ФОРМА СОЗДАНИЯ (СКРЫТА) -->
+            <div
+                class="document-create-card document-card document-card--create"
+                id="create-form"
+                style="display:none;">
+
+                <h3 class="document-create-title">Новый документ</h3>
+
+                <input
+                    type="text"
+                    id="new-name"
+                    class="document-input"
+                    placeholder="Название документа">
+
+                <input
+                    type="file"
+                    id="new-file"
+                    class="document-input">
+
+                <div class="create-actions document-actions">
+                    <button class="document-btn document-btn--save" id="create-btn">
+                        Создать
+                    </button>
+                    <button class="document-btn document-btn--cancel" id="cancel-create">
+                        Отмена
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ===== ПОДВАЛ ===== -->
+    <footer class="footer">
+
+        <div class="footer-column footer-left">
+            <a href="privacy.doc" download class="privacy-link">
+                Политика конфиденциальности
+            </a>
+        </div>
+
+        <div class="footer-column footer-center">
+            <nav class="footer-nav">
+                <a href="index.html" class="footer-nav-button">Главная</a>
+                <a href="/tasks" class="footer-nav-button">Задачи</a>
+                <a href="documents.html" class="footer-nav-button">Документы</a>
+                <a href="contacts.html" class="footer-nav-button">Контакты</a>
+                <a href="profile.html" class="footer-nav-button">Профиль</a>
+                <a href="apanel.html" class="footer-nav-button">А-панель</a>
+            </nav>
+        </div>
+
+        <div class="footer-right">
+            <h3 class="footer-title">Политика</h3>
+            <p class="footer-text">
+                2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.
+            </p>
+        </div>
+
+    </footer>
+
+</div>
+
+<!-- JS -->
+<script src="/js/documents.js"></script>
+
+</body>
+</html>

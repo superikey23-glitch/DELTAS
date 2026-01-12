@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Внутренний портал - ДЕЛА А</title>
+    <!-- Шрифты -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Стили (используем из первого варианта) -->
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/index.css">
+    <script>
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/login';
+    }
+</script>
+</head>
+<body>
+    <!-- контейнер всего сайта -->
+    <div class="site-container">
+        
+        <!-- шапка сайта (из первого варианта, но с функциональными ссылками) -->
+        <header class="header">
+            <a href="index.html" class="logo-button">ДЕЛЬТА</a>
+            
+            <p class="nav-link">Внутренний портал</p>
+            
+            <div class="header-buttons">
+                <a href="notifications.html" class="action-button">Уведомления</a>
+                <a href="profile.html" class="action-button">Профиль</a>
+            </div>
+        </header>
+
+        <!-- основное содержимое -->
+        <main class="main-content">
+            
+            <!-- блок с фразой дня (динамический из второго варианта) -->
+            <section class="daily-phrase">
+                <h1 id="daily-message">Загрузка...</h1>
+            </section>
+            
+            <!-- блок объявления (динамический из второго варианта) -->
+            <section class="announcement-section">
+                <div class="announcement-container">
+                    <h2 class="section-title announcement-title">Объявление всем сотрудникам</h2>
+                    <p id="admin-announcement">
+                        На данный момент объявлений нет
+                    </p>
+                </div>
+            </section>
+            
+            <!-- блок главных задач (динамический из второго варианта) -->
+            <section class="tasks-section">
+                <h2 class="section-title tasks-title">Важные задачи</h2>
+                <div class="tasks-container" id="tasksPreview">
+                    <!-- Динамически генерируемые задачи будут здесь -->
+                </div>
+            </section>
+            
+
+            
+        </main>
+
+        <!-- подвал сайта (полностью из первого варианта) -->
+        <footer class="footer">
+            
+            <!-- левая колонка подвала -->
+            <div class="footer-column footer-left">
+                <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+            </div>
+            
+            <!-- центральная колонка подвала (навигация) -->
+            <div class="footer-column footer-center">
+                <nav class="footer-nav">
+                    <a href="index.html" class="footer-nav-button">Главная</a>
+                    <a href="/tasks" class="footer-nav-button">Задачи</a>
+                    <a href="documents.html" class="footer-nav-button">Документы</a>
+                    <a href="contacts.html" class="footer-nav-button">Контакты</a>
+                    <a href="profile.html" class="footer-nav-button">Профиль</a>
+                    <a href="apanel.html" class="footer-nav-button">А-панель</a>
+                </nav>
+            </div>
+            
+            <!-- правая колонка подвала -->
+            <div class="footer-right">
+                <h3 class="footer-title">Политика</h3>
+                <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+            </div>
+            
+        </footer>
+    </div>
+
+    <!-- JS скрипты -->
+    <script src="/app.js"></script>
+
+</body>
+</html>

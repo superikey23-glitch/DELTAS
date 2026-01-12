@@ -1,0 +1,305 @@
+/* layout */
+/* шапка сайта */
+.header {
+    width: 100%;
+    height: 84px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: #FFFFFF;
+}
+
+/* кнопка логотипа */
+.logo-button {
+    width: 175px;
+    height: 48px;
+    background: #EAB308;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.logo-button:hover {
+    background: #d4a107;
+}
+
+/* навигация в шапке */
+.nav-link {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000000;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-link.active {
+    color: #CA9345;
+}
+
+.nav-link:hover {
+    color: #EAB308;
+}
+
+/* кнопки в шапке */
+.header-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.action-button {
+    height: 40px;
+    padding: 0 24px;
+    background: #EAB308;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.action-button:hover {
+    background: #d4a107;
+}
+
+/* основное содержимое */
+.main-content {
+    padding: 20px 24px;
+    flex: 1;
+}
+
+
+/* подвал сайта */
+.footer {
+    width: 100%;
+    height: 178px;
+    background: #A16207;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    justify-content: center;
+    background-repeat: repeat;
+}
+
+.footer-column {
+    height: 138px;
+    background: #FEF08A;
+    border-radius: 11px;
+    padding: 18px 44px 18px 44px;
+}
+
+/* левая колонка подвала */
+.footer-left {
+    width: 272px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.privacy-link {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    text-decoration-line: underline;
+    color: #374151;
+    width: 228px;
+}
+
+/* центральная колонка подвала */
+.footer-center {
+    margin: 0 24px;
+}
+
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 126px);
+    grid-template-rows: repeat(2, 41px);
+    gap: 17px;
+    height: 100%;
+    align-items: start; 
+    justify-content: center;
+    box-sizing: border-box; 
+}
+
+.footer-nav-button {
+    width: 126px;
+    height: 41px;
+    background: #EAB308;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.footer-nav-button:hover {
+    background: #d4a107;
+}
+
+/* правая колонка подвала */
+.footer-right {
+    width: 272px;
+    height: 138px;
+    background: #FEF08A;
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.footer-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.footer-text {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    color: #374151;
+}
+
+/* адаптивность для планшетов */
+@media (max-width: 1200px) {
+    .site-container {
+        max-width: 95%;
+        min-height: auto;
+    }
+    
+    .documents-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .header-nav {
+        position: static;
+        transform: none;
+    }
+    
+    .footer {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 20px;
+        position: static;
+        margin-top: 40px;
+    }
+    
+    .footer-column {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .footer-center {
+        margin: 20px 0;
+    }
+}
+
+/* адаптивность для мобильных */
+@media (max-width: 768px) {
+    .site-container {
+        width: 100%;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 16px;
+    }
+    
+    .header-nav {
+        margin: 20px 0;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .daily-phrase {
+        height: auto;
+        padding: 20px;
+        margin: 16px 0;
+    }
+    
+    #daily-message {
+        font-size: 20px;
+        line-height: 24px;
+    }
+    
+    .announcement-container {
+        padding: 16px;
+    }
+    
+    #admin-announcement {
+        font-size: 16px;
+        line-height: 20px;
+        padding: 16px;
+    }
+    
+    .tasks-container {
+        padding: 20px 16px;
+    }
+    
+    .documents-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .footer-nav {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+    .footer-nav {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-nav-button {
+        width: 100%;
+    }
+    
+    .document-card {
+        padding: 16px;
+    }
+    
+    .document-date {
+        position: static;
+        display: block;
+        margin-bottom: 8px;
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-sqlite3": "^0.9.16",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "name": "delta",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000d\u0000e\u0000l\u0000t\u0000a\u0000\r\u0000 \u0000#\u0000 \u0000d\u0000e\u0000l\u0000t\u0000a\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

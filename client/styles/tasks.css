@@ -1,0 +1,315 @@
+/*tasks */
+
+.page-title-section {
+    margin-bottom: 24px;
+    margin-top: 4px;
+    text-align: center;
+}
+
+.page-title {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    color: #374151;
+}
+
+/* =========================
+   SORTING PANEL
+========================= */
+
+/* =========================
+   TASKS — SORTING (как documents)
+========================= */
+
+.sorting-panel {
+    margin-left: -24px;
+    margin-right: -24px;
+    margin-bottom: 50px; /* ⬅ отступ от задач */
+}
+
+.sort-buttons {
+    width: 100%;
+    height: 78px;
+
+    background: #FEF9C3;
+    border-top: 4px solid #FEF08A;
+    border-bottom: 4px solid #FEF08A;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+
+    box-sizing: border-box;
+}
+
+.sort-btn {
+    width: 126px;   /* ⬅ новое */
+    height: 41px;   /* ⬅ новое */
+
+    background: #FFFFFF;
+    border: 2px solid #EAB308;
+    border-radius: 8px;
+
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 21px;
+
+    color: #EAB308;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.sort-btn.active {
+    background: #EAB308;
+    border: none;
+    color: #FFFFFF;
+}
+
+/* =========================
+   TASKS GRID
+========================= */
+
+.tasks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+    max-width: 1140px;
+    margin: 0 auto 60px;
+}
+
+/* =========================
+   TASK CARD — BASE
+========================= */
+
+.task-card {
+    background: #FEF9C3;
+    border: 1px solid #FDE68A;
+    border-radius: 14px;
+    min-height: 300px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+/* .task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+} */
+
+.card-inner {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    border-radius: 14px;
+    justify-content: center;
+
+
+}
+
+/* =========================
+   NEW TASK CARD
+========================= */
+
+.new-task-card {
+    background: #FEF9C3;
+    border: 2px dashed #EAB308;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.new-card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.plus-icon {
+    width: 48px;
+    height: 48px;
+    position: relative;
+}
+
+.plus-horizontal,
+.plus-vertical {
+    position: absolute;
+    background: #EAB308;
+    border-radius: 2px;
+}
+
+.plus-horizontal {
+    width: 48px;
+    height: 4px;
+    top: 22px;
+    left: 0;
+}
+
+.plus-vertical {
+    width: 4px;
+    height: 48px;
+    top: 0;
+    left: 22px;
+}
+
+.new-card-text {
+    font-weight: 600;
+    font-size: 18px;
+    color: #374151;
+    text-align: center;
+}
+
+/* =========================
+   TASK FIELDS — SAVED MODE
+========================= */
+
+.field-container {
+    margin-bottom: 14px;
+}
+
+.task-field {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 15px;
+    color: #374151;
+}
+
+/* Заголовок */
+.task-field.title {
+    font-weight: 600;
+}
+
+/* Описание */
+.task-field.description {
+    min-height: 72px;
+    color: #4B5563;
+}
+
+/* Приоритет / дата */
+.task-field.meta {
+    font-size: 14px;
+    color: #6B7280;
+}
+
+/* =========================
+   TASK INPUTS — EDIT MODE
+========================= */
+
+.task-input {
+    width: 100%;
+    background: #FFFFFF;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #374151;
+}
+
+.task-input:focus {
+    outline: none;
+    border-color: #EAB308;
+}
+
+.task-input::placeholder {
+    color: #9CA3AF;
+}
+
+/* =========================
+   CARD ACTIONS
+========================= */
+
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Редактировать */
+.edit-btn {
+    background: #EAB308;
+    color: #FFFFFF;
+}
+
+.edit-btn:hover {
+    background: #D4A107;
+}
+
+/* Удалить (как в макете) */
+.delete-btn {
+    background: #FFFFFF;
+    color: #EAB308;
+    border: 2px solid #EAB308;
+}
+
+.delete-btn:hover {
+    background: #FEF08A;
+}
+
+/* Сохранить */
+.save-btn {
+    background: #22C55E;
+    color: #FFFFFF;
+}
+
+.save-btn:hover {
+    background: #16A34A;
+}
+
+/* Отмена */
+.cancel-btn {
+    background: #FFFFFF;
+    color: #6B7280;
+    border: 2px solid #D1D5DB;
+}
+
+.cancel-btn:hover {
+    background: #F3F4F6;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1200px) {
+    .tasks-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .tasks-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sort-buttons {
+        gap: 8px;
+    }
+
+    .sort-btn {
+        padding: 0 16px;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,89 @@
+<!-- tasks.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задачи - Внутренний портал</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/tasks.css">
+    <script>
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        window.location.href = '/login';
+    }
+</script>
+</head>
+<body>
+    <div class="site-container">
+        <!-- Шапка (используем ваш готовый код) -->
+        <header class="header">
+            <a href="/" class="logo-button">ДЕЛЬТА</a>
+            <p class="nav-link">Внутренний портал</p>
+            <div class="header-buttons">
+                <a href="notifications.html" class="action-button">Уведомления</a>
+                <a href="profile.html" class="action-button">Профиль</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Заголовок страницы -->
+            <section class="page-title-section">
+                <h1 class="page-title">Задачи</h1>
+            </section>
+
+            <!-- Панель сортировки -->
+            <section class="sorting-panel">
+                <div class="sort-buttons">
+                    <button class="sort-btn active" data-sort="new">Новые</button>
+                    <button class="sort-btn" data-sort="old">Старые</button>
+                    <button class="sort-btn" data-sort="priority">Приоритет</button>
+                    <button class="sort-btn" data-sort="deadline">Дедлайн</button>
+                </div>
+            </section>
+
+            <!-- Контейнер для карточек задач -->
+            <section class="tasks-container" id="tasksGrid">
+                <!-- Карточки задач будут вставляться сюда через JavaScript -->
+                <!-- Шаблон новой (пустой) задачи будет добавлен в конец -->
+            </section>
+        </main>
+
+        <!-- Подвал (используем ваш готовый код) -->
+        <footer class="footer">
+            
+            <!-- левая колонка подвала -->
+            <div class="footer-column footer-left">
+                <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+            </div>
+            
+            <!-- центральная колонка подвала (навигация) -->
+            <div class="footer-column footer-center">
+                <nav class="footer-nav">
+                    <a href="index.html" class="footer-nav-button">Главная</a>
+                    <a href="/tasks" class="footer-nav-button">Задачи</a>
+                    <a href="documents.html" class="footer-nav-button">Документы</a>
+                    <a href="contacts.html" class="footer-nav-button">Контакты</a>
+                    <a href="profile.html" class="footer-nav-button">Профиль</a>
+                    <a href="apanel.html" class="footer-nav-button">А-панель</a>
+                </nav>
+            </div>
+            
+            <!-- правая колонка подвала -->
+            <div class="footer-right">
+                <h3 class="footer-title">Политика</h3>
+                <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+            </div>
+            
+        </footer>
+    </div>
+
+    </div>
+
+    <!-- Подключаем основной скрипт -->
+    <script src="app.js"></script>
+</body>
+</html>

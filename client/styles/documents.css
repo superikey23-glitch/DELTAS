@@ -1,0 +1,277 @@
+/* =========================
+   ОБЩЕЕ
+========================= */
+
+.documents-page {
+    padding-top: 20px;
+}
+
+.documents-section {
+    margin-bottom: 32px;
+}
+
+
+/* =========================
+   ЗАГОЛОВОК
+========================= */
+
+.documents-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #374151;
+    text-align: center;
+}
+
+
+/* =========================
+   СОРТИРОВКА
+========================= */
+
+.documents-sorting {
+    margin-left: -24px;
+    margin-right: -24px;
+}
+
+.documents-filters {
+    width: 100%;
+    height: 78px;
+
+    background: #FEF9C3;
+    border-top: 4px solid #FEF08A;
+    border-bottom: 4px solid #FEF08A;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+
+    box-sizing: border-box;
+}
+
+.documents-filters button {
+    width: 76px;
+    height: 42px;
+
+    background: #FFFFFF;
+    border: 2px solid #EAB308;
+    border-radius: 8px;
+
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 21px;
+
+    color: #EAB308;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.documents-filters button.active {
+    background: #EAB308;
+    border: none;
+    color: #FFFFFF;
+}
+
+
+/* =========================
+   СЕТКА ДОКУМЕНТОВ
+========================= */
+
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 525px);
+    gap: 32px;
+    justify-content: center;
+}
+
+
+/* =========================
+   КАРТОЧКА ДОКУМЕНТА
+========================= */
+
+.document-card {
+    position: relative;
+
+    width: 525px;
+    height: 268px;
+
+    border: 1px solid #D7D7D7;
+    border-radius: 21px;
+
+    padding: 22px 26px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   ДАТА
+========================= */
+
+.document-date {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+
+    width: 124px;
+    height: 34px;
+
+    border: 2px solid #EAB308;
+    border-radius: 5px;
+
+    font-size: 19px;
+    font-weight: 600;
+    color: #374151;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================
+   ТЕКСТ
+========================= */
+
+.document-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #374151;
+
+    margin-bottom: 26px;
+    max-width: 360px;
+}
+
+.document-filename {
+    font-size: 20px;
+    color: #374151;
+
+    margin-bottom: auto;
+    max-width: 360px;
+    word-break: break-word;
+}
+
+
+/* =========================
+   КНОПКИ — ОБЩИЕ
+========================= */
+
+.document-btn {
+    height: 46px;
+    border-radius: 9px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   РЕДАКТИРОВАТЬ / УДАЛИТЬ
+========================= */
+
+.document-actions-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.document-btn-primary {
+    width: 266px;
+    background: #EAB308;
+    border: none;
+    color: #FFFFFF;
+}
+
+.document-btn-outline {
+    width: 189px;
+    background: #FFFFFF;
+    border: 2px solid #EAB308;
+    color: #EAB308;
+}
+
+
+/* =========================
+   СКАЧАТЬ
+========================= */
+
+.document-btn-wide {
+    width: 471px;
+    height: 46px;
+
+    margin-top: 14px;
+
+    background: #EAB308;
+    border: none;
+    border-radius: 9px;
+
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+
+/* =========================
+   СОЗДАНИЕ ДОКУМЕНТА
+========================= */
+
+.documents-create {
+    display: flex;
+    justify-content: center;
+}
+
+.document-card--create {
+    width: 525px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.document-create-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.document-current-file {
+    margin-bottom: 31px;
+}
+
+.document-input {
+    width: 100%;
+    height: 46px;
+    margin-bottom: 16px;
+
+    border: 1px solid #D7D7D7;
+    border-radius: 8px;
+    padding: 10px 14px;
+
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.document-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.document-btn--save {
+    width: 266px;
+    background: #EAB308;
+    border: none;
+    color: #FFFFFF;
+}
+
+.document-btn--cancel {
+    width: 182px;
+    background: #FFFFFF;
+    border: 2px solid #EAB308;
+    color: #EAB308;
+}

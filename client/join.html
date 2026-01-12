@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/layout.css">
+    <link rel="stylesheet" href="/styles/join.css">
+</head>
+
+<body>
+<div class="site-container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <h1 class="page-title">Вход</h1>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <form id="loginForm" class="login-form">
+
+            <label>
+                Логин
+                <input type="text" id="username" required>
+            </label>
+
+            <label>
+                Пароль
+                <input type="password" id="password" required>
+            </label>
+
+            <button type="submit">
+                Войти
+            </button>
+
+            <p id="error" style="color:red;"></p>
+
+        </form>
+
+    </main>
+
+</div>
+
+<script>
+document.getElementById('loginForm').onsubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch('/api/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value
+        })
+    });
+
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        error.textContent = data.error || 'Ошибка входа';
+        return;
+    }
+
+    location.href = '/';
+};
+</script>
+
+</body>
+</html>

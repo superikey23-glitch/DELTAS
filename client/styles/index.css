@@ -1,0 +1,199 @@
+/* index */
+
+
+/* блок с фразой дня */
+.daily-phrase {
+    width: 100%;
+    height: 97px;
+    background: #FEF9C3;
+    border: 1px solid #FEF08A;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 43px;
+    margin-top: 24px;
+}
+
+#daily-message {
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    text-align: center;
+    color: #374151;
+    max-width: 1068px;
+    padding: 0 20px;
+}
+
+/* заголовки секций */
+.section-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 27px;
+    color: #374151;
+    margin-bottom: 30px;
+}
+
+.announcement-title {
+    font-size: 27px;
+    line-height: 33px;
+    color: #CA9345;
+    margin-bottom: 32px;
+}
+
+/* блок объявления */
+.announcement-section {
+    margin-bottom: 40px;
+}
+
+.announcement-container {
+    width: 100%;
+    max-width: 935px;
+    margin: 0 auto;
+    background: #FEF9C3;
+    border: 1px solid #E5E7EB;
+    border-radius: 11px;
+    padding: 32px;
+}
+
+#admin-announcement {
+    width: 100%;
+    margin: 0 auto;
+    background: #FEFFEF;
+    border: 1px solid #E5E7EB;
+    border-radius: 9px;
+    padding: 24px 32px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: #334230;
+    min-height: 154px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* блок главных задач */
+.tasks-section {
+    margin-bottom: 40px;
+}
+
+.tasks-container {
+    width: 100%;
+    max-width: 802px;
+    margin: 0 auto;
+    background: #FEF9C3;
+    border-radius: 11px;
+    padding: 18px 0 18px 0;
+}
+
+.task-item {
+    width: 100%;
+    max-width: 739px;
+    margin: 0 auto 20px;
+    background: #FEFFEF;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 14px 20px 14px 44px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+}
+
+.task-item:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ? */
+.task-bullet {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 12px;
+    background: #FFBF00;
+    border-radius: 50%;
+}
+
+.task-text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #334230;
+}
+
+/* блок последних документов */
+.documents-section {
+    margin-bottom: 30px;
+}
+
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.document-card {
+    border: 1px solid #D7D7D7;
+    border-radius: 9px;
+    padding: 20px;
+    position: relative;
+    min-height: 145px;
+}
+
+.document-name {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.document-filename {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.document-date {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #374151;
+}
+
+.download-button {
+    width: 100%;
+    height: 34px;
+    background: #EAB308;
+    border-radius: 9px;
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 16px;
+}
+
+.download-button:hover {
+    background: #d4a107;
+}
+
+
+.errmargin {
+    margin-left: 20px;
+}
