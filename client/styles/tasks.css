@@ -313,3 +313,21 @@
         font-size: 14px;
     }
 }
+
+/* урвсный цвет у задач */
+/* дедлайн завтра */
+.task-card.deadline-soon .card-inner {
+    border: 2px solid #dc2626; /* алый */
+    background: rgba(220, 38, 38, 0.05);
+}
+
+.task-card.deadline-soon .task-field[data-field="title"] {
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+/* просроченные задачи */
+.task-card.deadline-overdue .card-inner {
+    border: 2px solid #7f1d1d;
+    background: rgba(127, 29, 29, 0.08);
+}

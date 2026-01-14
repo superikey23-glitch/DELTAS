@@ -194,6 +194,27 @@ async function loadTasks() {
     }
 }
 
+function markDeadline(card, deadline) {
+    if (!deadline) return;
+
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+
+    today.setHours(0, 0, 0, 0);
+    deadlineDate.setHours(0, 0, 0, 0);
+
+    const daysDiff = Math.ceil(
+        (deadlineDate - today) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysDiff === 0 || daysDiff === 1) {
+        card.classList.add('deadline-soon');
+    }
+
+    if (daysDiff < 0) {
+        card.classList.add('deadline-overdue');
+    }
+}
 
 // отрисовка всех задач в сетке
 function renderTasks(tasks) {
@@ -273,6 +294,7 @@ function createTaskCard(task, isNew = false) {
                 </div>
             </div>
         `;
+        markDeadline(card, task.deadline);
     }
 
     return card;
