@@ -56,7 +56,7 @@
     border: 2px solid #EAB308;
     border-radius: 8px;
 
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
