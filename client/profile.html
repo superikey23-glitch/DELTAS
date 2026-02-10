@@ -15,63 +15,65 @@
 <div class="site-container">
 
     <!-- HEADER -->
-        <header class="header">
-            <a href="/" class="logo-button">ДЕЛЬТА</a>
-            <p class="nav-link">Внутренний портал</p>
-            <div class="header-buttons">
-                <a href="notifications.html" class="action-button">Уведомления</a>
-                <a href="profile.html" class="action-button">Профиль</a>
-            </div>
-        </header>
+    <header class="header">
+        <a href="/" class="logo-button">ДЕЛЬТА</a>
+        <p class="nav-link">Внутренний портал</p>
+        <div class="header-buttons">
+            <a href="notifications.html" class="action-button">Уведомления</a>
+            <a href="profile.html" class="action-button">Профиль</a>
+        </div>
+    </header>
 
     <!-- MAIN -->
     <main class="main-content">
+        <div class="profile-shell">
+
             <section class="page-title-section">
                 <h1 class="page-title">Профиль</h1>
             </section>
-        <form id="profileForm" class="profile-form">
 
-            <label>
-                ФИО
-                <input type="text" id="fullname" disabled>
-            </label>
+            <div class="profile-card">
+                <form id="profileForm" class="profile-form">
 
-            <label>
-                Телефон
-                <input type="text" id="phone" disabled>
-            </label>
+                    <label>
+                        ФИО
+                        <input type="text" id="fullname" disabled>
+                    </label>
 
-            <label>
-                Email
-                <input type="email" id="email" disabled>
-            </label>
+                    <label>
+                        Телефон
+                        <input type="text" id="phone" disabled>
+                    </label>
 
-            <label>
-                Должность
-                <input type="text" id="position" disabled>
-            </label>
+                    <label>
+                        Email
+                        <input type="email" id="email" disabled>
+                    </label>
 
-            <label>
-                Роль
-                <input type="text" id="role" disabled>
-            </label>
+                    <label>
+                        Должность
+                        <input type="text" id="position" disabled>
+                    </label>
 
-            <label>
-                Логин
-                <input type="text" id="username" disabled>
-            </label>
+                    <label>
+                        Роль
+                        <input type="text" id="role" disabled>
+                    </label>
 
-            <label>
-                Пароль
-                <input type="password" value="********" disabled>
-            </label>
+                    <label>
+                        Логин
+                        <input type="text" id="username" disabled>
+                    </label>
 
-            <button type="button" id="logoutBtn">
+                </form>
+            </div>
+
+            <!-- КНОПКА ВЫЙТИ СНИЗУ -->
+            <button type="button" id="logoutBtn" class="logout-btn">
                 Выйти
             </button>
 
-        </form>
-
+        </div>
     </main>
 
     <!-- FOOTER -->
@@ -82,18 +84,20 @@
 
         <div class="footer-column footer-center">
             <nav class="footer-nav">
-                    <a href="index.html" class="footer-nav-button">Главная</a>
-                    <a href="/tasks" class="footer-nav-button">Задачи</a>
-                    <a href="documents.html" class="footer-nav-button">Документы</a>
-                    <a href="contacts.html" class="footer-nav-button">Контакты</a>
-                    <a href="profile.html" class="footer-nav-button">Профиль</a>
-                    <a href="apanel.html" class="footer-nav-button">А-панель</a>
+                <a href="index.html" class="footer-nav-button">Главная</a>
+                <a href="/tasks" class="footer-nav-button">Задачи</a>
+                <a href="documents.html" class="footer-nav-button">Документы</a>
+                <a href="contacts.html" class="footer-nav-button">Контакты</a>
+                <a href="profile.html" class="footer-nav-button">Профиль</a>
+                <a href="apanel.html" class="footer-nav-button">А-панель</a>
             </nav>
         </div>
 
         <div class="footer-column footer-right">
             <h3 class="footer-title">Политика</h3>
-                <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+            <p class="footer-text">
+                2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.
+            </p>
         </div>
     </footer>
 
