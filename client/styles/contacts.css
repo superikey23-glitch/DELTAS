@@ -1,0 +1,228 @@
+/* ===== CONTACTS PAGE (fits base.css site-container 1206px) ===== */
+
+.contacts-shell{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* чтобы визуально было как в проекте */
+  padding: 24px 16px 40px;
+}
+
+/* Заголовок "Контакты" */
+.contacts-title-section{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 22px;
+}
+
+.contacts-title{
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: center;
+  color: #374151;
+}
+
+/* Большой жёлтый блок (832x930) */
+.contacts-board{
+  width: 832px;
+  min-height: 930px;
+
+  background: #FEF9C3;
+  border-radius: 52px;
+  box-sizing: border-box;
+
+  /* чтобы внутри легли 2 колонки по 160+423 и воздушно как на макете */
+  padding: 64px 76px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+/* Строки с “шахматкой” */
+.contact-row{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 46px;
+}
+
+/* Фото (160x160 круг) */
+.contact-photo{
+  width: 160px;
+  height: 160px;
+  flex: 0 0 160px;
+
+  border-radius: 999px;
+  overflow: hidden;
+
+  background: #fff;
+}
+
+.contact-photo img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Иконка бухгалтерии — пусть выглядит как на скрине */
+.icon-photo{
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.icon-photo img{
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+}
+
+/* Карточки (423x160) */
+.contact-card{
+  width: 423px;
+  height: 160px;
+
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 18px;
+  box-sizing: border-box;
+
+  padding: 22px 26px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.contact-role{
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 34px;
+  color: #334230;
+  margin: 0;
+}
+
+.contact-name{
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 24px;
+  color: #334230;
+  margin: 0;
+}
+
+.weight-600{ font-weight: 600; }
+.weight-700{ font-weight: 700; }
+
+.contact-accent{
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #EAB308;
+  margin: 0;
+}
+
+.contact-multiline{
+  line-height: 22px;
+}
+
+/* Чередование как на макете */
+.row-right .contact-photo{ order: 1; }
+.row-right .contact-card{ order: 2; }
+
+.row-left .contact-card{ order: 1; }
+.row-left .contact-photo{ order: 2; }
+
+/* ===== ADAPTIVE ===== */
+
+/* чтобы блок не вылезал из .site-container */
+@media (max-width: 920px){
+  .contacts-board{
+    width: min(832px, 100%);
+    padding: 50px 40px;
+    border-radius: 40px;
+  }
+
+  .contact-row{
+    gap: 28px;
+  }
+}
+
+/* планшет/телефон: всё в колонку */
+@media (max-width: 720px){
+  .contacts-board{
+    padding: 34px 20px;
+    gap: 28px;
+    border-radius: 34px;
+  }
+
+  .contact-row{
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  /* на мобиле всегда: сначала фото, потом карточка */
+  .row-left .contact-card,
+  .row-right .contact-card{
+    order: 2;
+  }
+  .row-left .contact-photo,
+  .row-right .contact-photo{
+    order: 1;
+  }
+
+  .contact-card{
+    width: 100%;
+    height: auto;
+    min-height: 160px;
+    padding: 18px 18px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-role{
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .contact-name{
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .contact-accent{
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+/* очень узкие экраны */
+@media (max-width: 420px){
+  .contact-photo{
+    width: 132px;
+    height: 132px;
+    flex-basis: 132px;
+  }
+
+  .icon-photo img{
+    width: 132px;
+    height: 132px;
+  }
+}
