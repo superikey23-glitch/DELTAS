@@ -16,34 +16,39 @@
 
     <!-- HEADER -->
     <header class="header">
-        <div class="header-inner">
-            <h1 class="page-title">Вход</h1>
-        </div>
+        <a href="/" class="logo-button">ДЕЛЬТА</a>
     </header>
 
     <!-- MAIN -->
     <main class="main-content">
+        <div class="login-shell">
 
-        <form id="loginForm" class="login-form">
+            <!-- Заголовок как в макете -->
+            <h1 class="login-title">Вход</h1>
 
-            <label>
-                Логин
-                <input type="text" id="username" required>
-            </label>
+            <form id="loginForm" class="login-form">
 
-            <label>
-                Пароль
-                <input type="password" id="password" required>
-            </label>
+                <div class="login-card">
 
-            <button type="submit">
-                Войти
-            </button>
+                    <label class="login-field">
+                        Логин
+                        <input type="text" id="username" required placeholder="Логин" autocomplete="username">
+                    </label>
 
-            <p id="error" style="color:red;"></p>
+                    <label class="login-field">
+                        Пароль
+                        <input type="password" id="password" required placeholder="Пароль" autocomplete="current-password">
+                    </label>
 
-        </form>
+                </div>
 
+                <button type="submit" class="login-btn">Войти</button>
+
+                <p id="error" class="login-error"></p>
+
+            </form>
+
+        </div>
     </main>
 
 </div>
@@ -61,7 +66,6 @@ document.getElementById('loginForm').onsubmit = async (e) => {
             password: password.value
         })
     });
-
 
     const data = await res.json();
 
