@@ -116,8 +116,8 @@ async function loadProfile() {
     phone.value = user.phone;
     email.value = user.email;
     position.value = user.position;
-    role.value = user.role;
-    username.value = user.username;
+    role.value = `Роль: ${user.role}`;
+    username.value = `Логин: ${user.username}`;
 }
 
 document.getElementById('logoutBtn').onclick = async () => {

@@ -328,7 +328,7 @@
 
 /* просроченные задачи */
 .task-card.deadline-overdue .card-inner {
-    border: 2.5px solid #d61515;
+    border: 2.5px solid #ff0000;
     background: rgba(127, 29, 29, 0.08);
 }
 /*проверка*/
