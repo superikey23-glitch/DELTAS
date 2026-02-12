@@ -332,17 +332,19 @@ app.get('/profile', (req, res) => {
 
 // Получение всех пользователей (только для админов)
 app.get('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
-    try {
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'role', 'createdAt', 'updatedAt'],
-            order: [['createdAt', 'DESC']]
-        });
-        res.json(users);
-    } catch (error) {
-        console.error('Ошибка получения пользователей:', error);
-        res.status(500).json({ error: 'Ошибка получения пользователей' });
-    }
+    const users = await User.findAll({
+        attributes: ['id', 'fullname', 'username', 'role'],
+        order: [['id', 'ASC']]
+    });
+
+    res.json(users.map(u => ({
+        id: u.id,
+        fullname: u.fullname || u.username,  // <-- вот ключевой момент
+        username: u.username,
+        role: u.role
+    })));
 });
+
 
 // Создание нового пользователя (только для админов)
 app.post('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
@@ -653,12 +655,184 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(clientPath, 'join.html'));
 });
 
+
+
+
+
+
+
+/* =======================
+   УВЕДОМЛЕНИЯ (персональные)
+   ВСТАВЬ В index.js одним блоком.
+   Требования: у тебя уже есть sequelize, DataTypes, app, User, requireAuth, requireRole.
+   TODO: добавить пагинацию по необходимости
+======================= */
+
+// ===== MODEL =====
+const Notification = sequelize.define('Notification', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  body: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  isRead: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  }
+}, {
+  timestamps: true // createdAt/updatedAt
+});
+
+// связь с пользователем
+Notification.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+User.hasMany(Notification, { foreignKey: 'userId' });
+
+// ===== ROUTES =====
+
+// 0) Админ: список пользователей (чтобы выбрать "кому")
+app.get('/api/admin/users', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ['id', 'fullname', 'username', 'role'],
+      order: [['id', 'ASC']]
+    });
+    res.json(users);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка получения пользователей' });
+  }
+});
+
+// 1) Получить уведомления (только свои)
+app.get('/api/notifications', requireAuth, async (req, res) => {
+  try {
+    const order = (req.query.order === 'old') ? 'ASC' : 'DESC';
+
+    const rows = await Notification.findAll({
+      where: { userId: req.user.id },
+      order: [['createdAt', order]]
+    });
+
+    // формат под фронт (как в notifications.html)
+    res.json(rows.map(n => ({
+      id: n.id,
+      title: n.title,
+      body: n.body,
+      is_read: n.isRead ? 1 : 0,
+      created_at: n.createdAt
+    })));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка получения уведомлений' });
+  }
+});
+
+// 2) Пометить как прочитанное (только своё)
+app.post('/api/notifications/:id/read', requireAuth, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'Некорректный id' });
+
+    const notif = await Notification.findOne({
+      where: { id, userId: req.user.id }
+    });
+
+    if (!notif) return res.status(404).json({ error: 'Не найдено' });
+
+    notif.isRead = true;
+    await notif.save();
+
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка обновления уведомления' });
+  }
+});
+
+// 3) Удалить уведомление (только своё)
+app.delete('/api/notifications/:id', requireAuth, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'Некорректный id' });
+
+    const deleted = await Notification.destroy({
+      where: { id, userId: req.user.id }
+    });
+
+    if (!deleted) return res.status(404).json({ error: 'Не найдено' });
+
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка удаления уведомления' });
+  }
+});
+
+// 4) Админ: отправить уведомление конкретному пользователю
+app.post('/api/admin/notifications', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const userId = Number(req.body.userId);
+    const title = String(req.body.title || '').trim();
+    const body = String(req.body.body || '').trim();
+
+    if (!Number.isFinite(userId) || userId <= 0) {
+      return res.status(400).json({ error: 'Нужен корректный userId' });
+    }
+    if (!title || !body) {
+      return res.status(400).json({ error: 'Нужны title и body' });
+    }
+    
+
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+
+    const created = await Notification.create({
+      title,
+      body,
+      userId,
+      isRead: false
+    });
+
+    res.json({ ok: true, id: created.id });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка создания уведомления' });
+  }
+});
+
+/* =======================
+   КОНЕЦ БЛОКА УВЕДОМЛЕНИЙ
+======================= */
+
+
+
+
+
+
+
+
+
+
+
+
 /* =======================
    404
 ======================= */
 app.use((req, res) => {
     res.status(404).json({ error: 'Маршрут не найден' });
 });
+
+
+
+
+
+
+
+
 
 /* =======================
    Синхронизация БД и запуск сервера

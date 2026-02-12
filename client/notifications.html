@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Уведомления</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <link rel="stylesheet" href="/styles/notifications.css">
+</head>
+
+<body>
+<div class="site-container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="/" class="logo-button">ДЕЛЬТА</a>
+    <p class="nav-link">Внутренний портал</p>
+    <div class="header-buttons">
+      <a href="notifications.html" class="action-button">Уведомления</a>
+      <a href="profile.html" class="action-button">Профиль</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="notifs-shell">
+
+      <section class="notifs-title-section">
+        <h1 class="notifs-title">Уведомления</h1>
+      </section>
+
+      <!-- Фильтр-панель -->
+      <section class="notifs-filterbar">
+        <div class="notifs-filterbar-inner">
+          <button type="button" class="sort-btn is-active" id="sortNewBtn">Сначала новые</button>
+          <button type="button" class="sort-btn is-outline" id="sortOldBtn">Сначала старые</button>
+        </div>
+      </section>
+
+      <!-- список уведомлений -->
+      <section class="notifs-list" id="notifsList"></section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-column footer-left">
+      <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+    </div>
+
+    <div class="footer-column footer-center">
+      <nav class="footer-nav">
+        <a href="index.html" class="footer-nav-button">Главная</a>
+        <a href="/tasks" class="footer-nav-button">Задачи</a>
+        <a href="documents.html" class="footer-nav-button">Документы</a>
+        <a href="contacts.html" class="footer-nav-button">Контакты</a>
+        <a href="profile.html" class="footer-nav-button">Профиль</a>
+        <a href="admin_notify.html" class="footer-nav-button">А-панель</a>
+      </nav>
+    </div>
+
+    <div class="footer-column footer-right">
+      <h3 class="footer-title">Политика</h3>
+      <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/**
+ * TODO: добавить пагинацию по необходимости
+ */
+
+let currentOrder = 'new'; // new | old
+
+const notifsList = document.getElementById('notifsList');
+const sortNewBtn = document.getElementById('sortNewBtn');
+const sortOldBtn = document.getElementById('sortOldBtn');
+
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function formatDateRU(isoOrDate) {
+  const d = new Date(isoOrDate);
+  if (Number.isNaN(d.getTime())) return String(isoOrDate ?? '');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy = d.getFullYear();
+  return `${dd}.${mm}.${yyyy}`;
+}
+
+function setActiveSort(order) {
+  currentOrder = order;
+  if (order === 'new') {
+    sortNewBtn.classList.add('is-active');
+    sortNewBtn.classList.remove('is-outline');
+    sortOldBtn.classList.remove('is-active');
+    sortOldBtn.classList.add('is-outline');
+  } else {
+    sortOldBtn.classList.add('is-active');
+    sortOldBtn.classList.remove('is-outline');
+    sortNewBtn.classList.remove('is-active');
+    sortNewBtn.classList.add('is-outline');
+  }
+}
+
+async function fetchNotifications() {
+  // если у тебя сессия/куки — credentials оставляем включённым
+  const res = await fetch(`/api/notifications?order=${encodeURIComponent(currentOrder)}`, {
+    credentials: 'include'
+  });
+
+  // если потом добавишь авторизацию — можно редиректить на /login
+  if (res.status === 401) {
+    location.href = '/login';
+    return [];
+  }
+
+  if (!res.ok) {
+    console.error('Ошибка загрузки уведомлений', res.status);
+    return [];
+  }
+
+  return await res.json();
+}
+
+function renderNotifications(items) {
+  notifsList.innerHTML = '';
+
+  if (!items || items.length === 0) {
+    notifsList.innerHTML = `<div class="notifs-empty">Уведомлений нет</div>`;
+    return;
+  }
+
+  for (const n of items) {
+    const isRead = !!n.is_read;
+
+    const title = escapeHtml(n.title);
+    const body = escapeHtml(n.body);
+    const date = formatDateRU(n.created_at);
+
+    const card = document.createElement('article');
+    card.className = 'notif-card';
+    card.dataset.id = n.id;
+
+    card.innerHTML = `
+      <div class="notif-top">
+        <div class="notif-titlebox">${title}</div>
+        <div class="notif-datebox">${date}</div>
+      </div>
+
+      <div class="notif-bodybox">${body}</div>
+
+      <div class="notif-actions">
+        ${
+          isRead
+            ? `<button type="button" class="btn-read btn-read-done" disabled>Прочитано</button>`
+            : `<button type="button" class="btn-read" data-action="read">Пометить как прочитанное</button>`
+        }
+        <button type="button" class="btn-del" data-action="delete">Удалить</button>
+      </div>
+    `;
+
+    notifsList.appendChild(card);
+  }
+}
+
+async function markRead(id) {
+  const res = await fetch(`/api/notifications/${id}/read`, {
+    method: 'POST',
+    credentials: 'include'
+  });
+  if (!res.ok) return false;
+  return true;
+}
+
+async function deleteNotif(id) {
+  const res = await fetch(`/api/notifications/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+  if (!res.ok) return false;
+  return true;
+}
+
+async function refresh() {
+  const items = await fetchNotifications();
+  renderNotifications(items);
+}
+
+sortNewBtn.onclick = async () => {
+  setActiveSort('new');
+  await refresh();
+};
+sortOldBtn.onclick = async () => {
+  setActiveSort('old');
+  await refresh();
+};
+
+notifsList.onclick = async (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+
+  const card = e.target.closest('.notif-card');
+  if (!card) return;
+
+  const id = card.dataset.id;
+  const action = btn.dataset.action;
+
+  if (action === 'read') {
+    const ok = await markRead(id);
+    if (ok) await refresh();
+  }
+
+  if (action === 'delete') {
+    const ok = await deleteNotif(id);
+    if (ok) await refresh();
+  }
+};
+
+setActiveSort('new');
+refresh();
+</script>
+
+</body>
+</html>
