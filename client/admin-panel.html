@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Внутренний портал — Админ панель</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+  <!-- твои базовые стили -->
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+
+  <!-- стили этой страницы -->
+  <link rel="stylesheet" href="/styles/admin-panel.css">
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/login';
+  </script>
+</head>
+
+<body>
+  <div class="site-container">
+    <header class="header">
+      <a href="index.html" class="logo-button">ДЕЛЬТА</a>
+      <p class="nav-link">Внутренний портал</p>
+      <div class="header-buttons">
+        <a href="notifications.html" class="action-button">Уведомления</a>
+        <a href="profile.html" class="action-button">Профиль</a>
+      </div>
+    </header>
+
+    <main class="main-content admin-main">
+      <h1 class="admin-title">Админ панель</h1>
+
+      <section class="admin-grid" aria-label="Админ действия">
+        <!-- 1 -->
+        <a class="admin-card" href="create-notification.html">
+          <div class="admin-icon" aria-hidden="true">
+            <!-- bell -->
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none">
+              <path d="M12 22a2.5 2.5 0 0 0 2.45-2H9.55A2.5 2.5 0 0 0 12 22Z" fill="#fff"/>
+              <path d="M18 16V11a6 6 0 1 0-12 0v5l-2 2v1h18v-1l-2-2Z" fill="#fff"/>
+            </svg>
+          </div>
+
+          <div class="admin-card-text">
+            <div class="admin-card-title">Создать уведомление</div>
+            <div class="admin-card-subtitle">Разослать уведомление пользователям</div>
+          </div>
+        </a>
+
+        <!-- 2 -->
+        <a class="admin-card" href="create-announcement.html">
+          <div class="admin-icon" aria-hidden="true">
+            <!-- megaphone -->
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none">
+              <path d="M3 11v2a2 2 0 0 0 2 2h2l3.2 4.8A1.5 1.5 0 0 0 13.5 19h.7a1 1 0 0 0 .98-1.2L14 15h1l7-3V6l-7-3H5a2 2 0 0 0-2 2v2" fill="#fff"/>
+              <path d="M22 9.5a4 4 0 0 1 0 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="admin-card-text">
+            <div class="admin-card-title">Создать объявление</div>
+            <div class="admin-card-subtitle">Публикация на главной странице всем</div>
+          </div>
+        </a>
+
+        <!-- 3 -->
+        <a class="admin-card" href="documentation.html">
+          <div class="admin-icon" aria-hidden="true">
+            <!-- document -->
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none">
+              <path d="M7 2h7l5 5v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" fill="#fff" opacity="0.95"/>
+              <path d="M14 2v5h5" fill="#fff"/>
+              <path d="M8 12h8M8 16h8" stroke="#EAB308" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div class="admin-card-text">
+            <div class="admin-card-title">Документация</div>
+            <div class="admin-card-subtitle">Архив документов всех сотрудников</div>
+          </div>
+        </a>
+
+        <!-- 4 -->
+        <a class="admin-card" href="profiles.html">
+          <div class="admin-icon" aria-hidden="true">
+            <!-- users -->
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none">
+              <path d="M9 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="#fff"/>
+              <path d="M17 12a3.5 3.5 0 1 0-3.5-3.5A3.5 3.5 0 0 0 17 12Z" fill="#fff" opacity="0.9"/>
+              <path d="M2.5 22a6.5 6.5 0 0 1 13 0" fill="#fff"/>
+              <path d="M14.2 22a5.2 5.2 0 0 1 7.3-4.8A5.2 5.2 0 0 1 22.5 22" fill="#fff" opacity="0.9"/>
+            </svg>
+          </div>
+
+          <div class="admin-card-text">
+            <div class="admin-card-title">Профили</div>
+            <div class="admin-card-subtitle">Список пользователей, создание и удаление</div>
+          </div>
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-column footer-left">
+        <a href="privacy.doc" download class="privacy-link">Политика<br>конфиденциальности</a>
+      </div>
+
+      <div class="footer-column footer-center">
+        <nav class="footer-nav">
+          <a href="index.html" class="footer-nav-button">Главная</a>
+          <a href="/tasks" class="footer-nav-button">Задачи</a>
+          <a href="documents.html" class="footer-nav-button">Документы</a>
+          <a href="contacts.html" class="footer-nav-button">Контакты</a>
+          <a href="profile.html" class="footer-nav-button">Профиль</a>
+          <a href="admin-panel.html" class="footer-nav-button">А-панель</a>
+        </nav>
+      </div>
+
+      <div class="footer-right">
+        <h3 class="footer-title">Политика</h3>
+        <p class="footer-text">2025 © Все права защищены.<br>Внутренние стандарты безопасности и конфиденциальности.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

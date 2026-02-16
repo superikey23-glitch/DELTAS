@@ -811,6 +811,69 @@ app.post('/api/admin/notifications', requireAuth, requireRole('admin'), async (r
 
 
 
+/* =======================
+   ОБЪЯВЛЕНИЕ (одно на весь портал)
+======================= */
+
+// MODEL
+const Announcement = sequelize.define('Announcement', {
+  text: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    defaultValue: ''
+  }
+}, {
+  timestamps: true
+});
+
+// helper: гарантируем одну запись (id=1)
+async function ensureAnnouncementRow() {
+  const row = await Announcement.findByPk(1);
+  if (!row) {
+    await Announcement.create({ id: 1, text: '' });
+  }
+}
+
+// API: получить объявление (любой авторизованный)
+app.get('/api/announcement', requireAuth, async (req, res) => {
+  try {
+    await ensureAnnouncementRow();
+    const row = await Announcement.findByPk(1);
+    res.json({ text: row?.text || '' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка получения объявления' });
+  }
+});
+
+// API: изменить объявление (только админ)
+app.put('/api/admin/announcement', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    await ensureAnnouncementRow();
+    const text = String(req.body.text || '').trim();
+
+    const row = await Announcement.findByPk(1);
+    row.text = text;
+    await row.save();
+
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка сохранения объявления' });
+  }
+});
+
+/* =======================
+   СТРАНИЦА админ-редактирования
+======================= */
+
+// защита страницы (добавь в список)
+app.use(['/tasks', '/documents', '/profile', '/admin_announcement'], checkPageAuth);
+
+// раздача страницы
+app.get('/admin_announcement', (req, res) => {
+  res.sendFile(path.join(clientPath, 'admin_announcement.html'));
+});
 
 
 

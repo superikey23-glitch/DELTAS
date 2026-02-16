@@ -1,0 +1,166 @@
+/* Заголовок */
+.aa-page-title{
+  margin: 40px auto 70px;
+  text-align: center;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
+
+  color: #374151;
+}
+
+/* Плашка 935x331 */
+.aa-panel{
+  width: 935px;
+  height: 331px;
+  margin: 0 auto;
+
+  background: #FEF9C3;
+  border: 1px solid #E5E7EB;
+  border-radius: 11px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Заголовок внутри */
+.aa-panel-title{
+  margin: 26px 0 18px;
+  width: 555px;
+  height: 29px;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 33px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  color: #CA9345;
+}
+
+/* Поле текста 880.24x154 */
+.aa-textbox{
+  width: 880.24px;
+  height: 154px;
+
+  background: #FEFFEF;
+  border: 1px solid #E5E7EB;
+  border-radius: 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 24px;
+}
+
+/* Текст (режим просмотра): перенос даже без пробелов + максимум 5 строк */
+.aa-text{
+  margin: 0;
+  width: 816.66px;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #334230;
+
+  text-align: center;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Текст (режим редактирования): тоже 5 строк по высоте */
+.aa-textarea{
+  width: 816.66px;
+  height: 120px; /* 5 строк * 24px = 120 */
+  max-height: 120px;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #334230;
+  text-align: center;
+
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Кнопки */
+.aa-actions{
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aa-btn{
+  width: 159px;
+  height: 41px;
+
+  background: #EAB308;
+  border-radius: 8px;
+  border: none;
+
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 21px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.aa-btn:active{ transform: translateY(1px); }
+
+.aa-edit-actions{
+  display: flex;
+  gap: 10px;
+}
+
+.aa-btn-secondary{
+  background: #9CA3AF;
+}
+
+/* Статус */
+.aa-status{
+  margin: 12px 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #374151;
+  text-align: center;
+  min-height: 18px;
+}
+
+/* Адаптив: если экран меньше 980px — плашка сжимается */
+@media (max-width: 980px){
+  .aa-panel{ width: 100%; height: auto; padding-bottom: 18px; }
+  .aa-textbox{ width: calc(100% - 32px); }
+  .aa-text, .aa-textarea{ width: 100%; }
+}
