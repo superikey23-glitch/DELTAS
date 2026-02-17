@@ -1,111 +1,107 @@
-/* admin-panel.css — точные размеры под твои данные */
+/* Точное повторение по меркам с картинки подтверждения */
 
 .admin-main{
-  padding-top: 46px;
-  padding-bottom: 60px;
+  /* расстояния в макете: от "Внутренний портал" до заголовка/плашек */
+  padding-top: 41px;   /* сверху до заголовка */
+  padding-bottom: 94px;/* от нижнего ряда до футера */
 }
 
+/* Заголовок "Админ панель" */
 .admin-title{
-  text-align:center;
-  font-weight:700;
-  font-size:34px;
-  line-height:41px;
-  color:#374151;
-  margin:0 0 34px;
+  margin: 0 0 57px; /* от заголовка до верхнего ряда плашек */
+  text-align: center;
+
+  font-weight: 700;
+  font-size: 34px;      /* как на твоей схеме */
+  line-height: 31px;
+  color: #374151;
 }
 
-/* Сетка под 2 карточки в ряд */
+/* Сетка 2x2 */
 .admin-grid{
-  width:100%;
-  max-width: 511px; /* на мобилке сузится */
-  margin:0 auto;
-  display:grid;
-  grid-template-columns: repeat(2, 511px);
-  justify-content:center;
-  gap: 32px; /* можешь сказать точный gap — поставлю */
-  padding: 0;
+  display: grid;
+  grid-template-columns: 511px 511px;
+  column-gap: 57px; /* между колонками */
+  row-gap: 52px;    /* между рядами */
+  justify-content: center;
 }
 
-/* Карточка (плашка) */
+/* Плашка */
 .admin-card{
   width: 511px;
   height: 215px;
+  border-radius: 23px;
+  background: #EAB308;
 
-  background:#EAB308;
-  border-radius: 16px;
+  text-decoration: none;
+  display: block;
 
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-
-  text-decoration:none;
-  padding: 0; /* чтобы размер был ровно 511×215 */
-  transition: filter .12s ease, transform .12s ease;
+  /* лёгкая интерактивность, без сдвига размеров */
+  transition: filter .15s ease, transform .15s ease;
 }
 
 .admin-card:hover{
-  filter: brightness(.98);
+  filter: brightness(0.98);
   transform: translateY(-1px);
 }
 
-/* Иконка: подгоню после твоего svg, пока делаю адекватную */
+/* Внутреннее позиционирование по вертикальным отступам */
+.admin-card-inner{
+
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  padding-top: 33px;   /* от верхней границы плашки до иконки */
+  padding-bottom: 54px;/* от подписи до низа плашки */
+
+}
+
+/* Иконка */
 .admin-icon{
-  width: 64px;
-  height: 64px;
-  display:grid;
-  place-items:center;
-  margin-bottom: 12px;
+  display: block;
+   /* если у твоих svg другой “правильный” размер — скажи, поменяю */
+  width: auto;
+  margin: 0 0 10px; /* от иконки до заголовка */
 }
 
-/* Чтобы SVG точно слушался размера контейнера */
-.admin-icon svg{
-  width: 64px;
-  height: 64px;
-  display:block;
-}
-
-/* Текст */
-.admin-card-text{
-  text-align:center;
-  max-width: 440px;
-  padding: 0 16px;
-}
-
+/* Главный текст */
 .admin-card-title{
-  font-weight:700;
-  font-size:32px;
+  margin: 0 0 12px; /* от заголовка до подзаголовка */
+
+  font-weight: 700;
+  font-size: 32px;    /* по твоим данным */
   line-height: 38px;
-  color:#fff;
-  margin:0 0 8px;
+  color: #FFFFFF;
 }
 
+/* Второстепенный текст */
 .admin-card-subtitle{
-  font-weight:400;
-  font-size:20px;
+  margin: 0;
+
+  font-weight: 400;
+  font-size: 20px;    /* по твоим данным */
   line-height: 24px;
-  color: rgba(255,255,255,.92);
-  margin:0;
+  color: #FFFFFF;
 }
 
-/* Адаптив: на узких экранах 1 колонка */
+/* Адаптив: при узкой ширине делаем 1 колонку */
 @media (max-width: 1120px){
   .admin-grid{
     grid-template-columns: 511px;
   }
 }
 
-/* Чтобы на совсем маленьких влезало: уменьшаем карточку пропорционально */
+/* На маленьких — плашка тянется на 100%, но сохраняет пропорции */
 @media (max-width: 560px){
   .admin-grid{
     grid-template-columns: min(511px, 100%);
-    padding: 0 10px;
+    justify-content: center;
   }
 
   .admin-card{
     width: 100%;
-    height: auto;
-    min-height: 215px; /* сохраняем ощущение макета */
-    padding: 22px 16px 20px;
   }
 }
