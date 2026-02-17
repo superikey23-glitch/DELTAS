@@ -8,90 +8,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/layout.css">
-
-  <style>
-    .ap-shell{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 40px 16px 60px;
-    }
-
-    .ap-card{
-      width: min(700px, 100%);
-      background: #FEF9C3;
-      border: 1px solid #E5E7EB;
-      border-radius: 11px;
-      padding: 24px;
-      box-sizing: border-box;
-    }
-
-    .ap-title{
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      text-align: center;
-      color: #374151;
-      margin-bottom: 22px;
-    }
-
-    .ap-field{
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .ap-field label{
-      font-weight: 700;
-      font-size: 14px;
-      color: #334230;
-    }
-
-    .ap-field input,
-    .ap-field textarea,
-    .ap-field select{
-      width: 100%;
-      border: 1px solid #E5E7EB;
-      border-radius: 9px;
-      padding: 12px 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      background: #FEFFEF;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .ap-btn{
-      width: 240px;
-      height: 45px;
-      background: #EAB308;
-      border: none;
-      border-radius: 9px;
-      color: #FFFFFF;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      display: block;
-      margin: 10px auto 0;
-    }
-
-    .ap-btn:hover{
-      filter: brightness(0.95);
-    }
-
-    .ap-msg{
-      text-align: center;
-      margin-top: 14px;
-      font-weight: 700;
-    }
-  </style>
+  <link rel="stylesheet" href="/styles/admin_notify.css">
 </head>
 
 <body>
 <div class="site-container">
 
-  <!-- HEADER -->
   <header class="header">
     <a href="/" class="logo-button">ДЕЛЬТА</a>
     <p class="nav-link">Внутренний портал</p>
@@ -101,41 +23,57 @@
     </div>
   </header>
 
-  <!-- MAIN -->
   <main class="main-content">
-    <div class="ap-shell">
-      <div class="ap-card">
 
-        <div class="ap-title">Отправка уведомления</div>
+    <h1 class="an-title">Админ-панель (уведомления)</h1>
 
-        <form id="sendForm">
+    <section class="an-panel">
+      <form id="sendForm" class="an-form">
 
-          <div class="ap-field">
-            <label for="userSelect">Кому отправить</label>
-            <select id="userSelect" required>
-              <option value="">Загрузка...</option>
-            </select>
-          </div>
+        <!-- SELECT с автошириной -->
+        <div class="an-select-wrap an-to">
+          <select id="userSelect" class="an-select" required>
+            <option value="">Загрузка...</option>
+          </select>
+        </div>
 
-          <div class="ap-field">
-            <label for="title">Заголовок</label>
-            <input id="title" required maxlength="45" placeholder="Введите заголовок (до 45 символов)">
-          </div>
+        <input id="title" class="an-input an-subject"
+               placeholder="Введите заголовок (до 45 символов)"
+               maxlength="45" required>
 
-          <div class="ap-field">
-            <label for="body">Описание</label>
-            <textarea id="body" rows="4" required placeholder="Введите текст уведомления"></textarea>
-          </div>
+        <textarea id="body" class="an-textarea"
+                  placeholder="Сообщение..." required></textarea>
 
-          <button type="submit" class="ap-btn">Отправить</button>
+        <button type="submit" class="an-btn">Отправить</button>
 
-          <div id="msg" class="ap-msg"></div>
+        <div id="msg" class="an-msg" aria-live="polite"></div>
 
-        </form>
+      </form>
+    </section>
 
-      </div>
-    </div>
   </main>
+
+  <footer class="footer">
+    <div class="footer-column footer-left">
+      <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+    </div>
+
+    <div class="footer-column footer-center">
+      <nav class="footer-nav">
+        <a href="index.html" class="footer-nav-button">Главная</a>
+        <a href="/tasks" class="footer-nav-button">Задачи</a>
+        <a href="documents.html" class="footer-nav-button">Документы</a>
+        <a href="contacts.html" class="footer-nav-button">Контакты</a>
+        <a href="profile.html" class="footer-nav-button">Профиль</a>
+        <a href="admin-panel.html" class="footer-nav-button">А-панель</a>
+      </nav>
+    </div>
+
+    <div class="footer-right">
+      <h3 class="footer-title">Политика</h3>
+      <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+    </div>
+  </footer>
 
 </div>
 
@@ -143,40 +81,83 @@
 const form = document.getElementById('sendForm');
 const msg = document.getElementById('msg');
 const userSelect = document.getElementById('userSelect');
+const titleEl = document.getElementById('title');
+const bodyEl = document.getElementById('body');
 
-/* Загрузка пользователей */
+let users = [];
+
+/* загрузка пользователей */
 async function loadUsers() {
   try {
-    const res = await fetch('/api/users', {
-      credentials: 'include'
-    });
+    const res = await fetch('/api/users', { credentials: 'include' });
 
     if (!res.ok) {
       userSelect.innerHTML = '<option value="">Ошибка загрузки</option>';
       return;
     }
 
-    const users = await res.json();
+    users = await res.json();
 
     userSelect.innerHTML = '<option value="">Выберите пользователя</option>';
 
     users.forEach(u => {
       const option = document.createElement('option');
       option.value = u.id;
-      option.textContent = `${u.fullname} (${u.username})`;
+      option.textContent = `${u.fullname || ''} (${u.username})`;
       userSelect.appendChild(option);
     });
 
-  } catch (e) {
+    updateSelectWidth();
+
+  } catch (_) {
     userSelect.innerHTML = '<option value="">Ошибка</option>';
   }
 }
 
-/* Отправка уведомления */
+function updateSelectWidth() {
+  const opt = userSelect.options[userSelect.selectedIndex];
+  const text = (opt ? opt.textContent : '') || '';
+
+  const cs = getComputedStyle(userSelect);
+
+  const span = document.createElement('span');
+  span.style.position = 'absolute';
+  span.style.visibility = 'hidden';
+  span.style.whiteSpace = 'nowrap';
+  span.style.fontFamily = cs.fontFamily;
+  span.style.fontSize = cs.fontSize;
+  span.style.fontWeight = cs.fontWeight;
+  span.style.letterSpacing = cs.letterSpacing;
+  span.textContent = text;
+
+  document.body.appendChild(span);
+  const textW = Math.ceil(span.getBoundingClientRect().width);
+  document.body.removeChild(span);
+
+  const minW = 300;
+  const maxW = 1038;
+
+  // точно под наши padding: left 16 + right 44 (под стрелку) + небольшой запас
+  const w = textW + 16 + 40 ;
+
+  const wrap = document.querySelector('.an-select-wrap.an-to');
+  wrap.style.width = Math.max(minW, Math.min(maxW, w)) + 'px';
+}
+
+
+userSelect.addEventListener('change', updateSelectWidth);
+
+/* отправка */
 form.onsubmit = async (e) => {
   e.preventDefault();
   msg.textContent = '';
-  msg.style.color = '';
+  msg.classList.remove('ok', 'err');
+
+  if (!userSelect.value) {
+    msg.textContent = 'Выберите пользователя';
+    msg.classList.add('err');
+    return;
+  }
 
   const res = await fetch('/api/admin/notifications', {
     method: 'POST',
@@ -184,22 +165,23 @@ form.onsubmit = async (e) => {
     credentials: 'include',
     body: JSON.stringify({
       userId: userSelect.value,
-      title: title.value,
-      body: body.value
+      title: titleEl.value,
+      body: bodyEl.value
     })
   });
 
   const data = await res.json().catch(()=> ({}));
 
   if (!res.ok) {
-    msg.style.color = 'red';
     msg.textContent = data.error || 'Ошибка отправки';
+    msg.classList.add('err');
     return;
   }
 
-  msg.style.color = '#334230';
   msg.textContent = 'Уведомление отправлено!';
+  msg.classList.add('ok');
   form.reset();
+  updateSelectWidth();
 };
 
 loadUsers();
