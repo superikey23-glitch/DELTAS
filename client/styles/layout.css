@@ -83,7 +83,7 @@
     padding: 20px 24px;
     flex: 1;
 }
-
+.main-content { padding: 20px 0; }
 
 /* подвал сайта */
 .footer {

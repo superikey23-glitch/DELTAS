@@ -73,10 +73,11 @@
 
     min-height: 154px;
 
-    /* ВАЖНО */
+    white-space: pre-wrap;      /* ← вот это главное */
     overflow-wrap: anywhere;
     word-break: break-word;
 }
+
 
 /* блок главных задач */
 .tasks-section {

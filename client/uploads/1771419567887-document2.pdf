@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Внутренний портал - ДЕЛА А</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- контейнер всего сайта -->
+    <div class="site-container">
+        
+        <!-- шапка сайта -->
+        <header class="header">
+            <a href="index.html" class="logo-button">ДЕЛЬТА</a>
+            
+            <nav class="header-nav">
+                <a href="#" class="nav-link active">Внутренний портал</a>
+                <a href="notifications.html" class="nav-link">Уведомления</a>
+                <a href="#" class="nav-link">Прорыв</a>
+            </nav>
+            
+            <div class="header-buttons">
+                <a href="notifications.html" class="action-button">Уведомления</a>
+                <a href="profile.html" class="action-button">Профиль</a>
+            </div>
+        </header>
+
+        <!-- основное содержимое -->
+        <main class="main-content">
+            
+            <!-- блок с фразой дня -->
+            <section class="daily-phrase">
+                <h1 id="daily-message">Сегодня отличный день, чтобы работать с хорошим настроением!</h1>
+            </section>
+            
+            <!-- блок объявления -->
+            <section class="announcement-section">
+                <h2 class="section-title announcement-title">Объявление всем сотрудникам</h2>
+                <div class="announcement-container">
+                    <p id="admin-announcement">Логистика семян подорожала на 3,2% от предыдущей цены. Будет проведена проверка эффективности производства.</p>
+                </div>
+            </section>
+            
+            <!-- блок главных задач -->
+            <section class="tasks-section">
+                <h2 class="section-title tasks-title">Главные задачи</h2>
+                <div class="tasks-container">
+                    <div class="task-item">
+                        <span class="task-bullet"></span>
+                        <p class="task-text">Дописать отчёт за май 2025</p>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-bullet"></span>
+                        <p class="task-text">Заработать миллион долларов</p>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-bullet"></span>
+                        <p class="task-text">Вернуть сотку Андрея</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- блок последних документов -->
+            <section class="documents-section">
+                <h2 class="section-title documents-title">Последние документы</h2>
+                <div class="documents-grid">
+                    
+                    <!-- документ 1 -->
+                    <div class="document-card">
+                        <h3 class="document-name">Отчёт за логистику май 2025</h3>
+                        <p class="document-filename">otchet-may-2025.pdf</p>
+                        <span class="document-date">04.06.2025</span>
+                        <button class="download-button" data-file="document1.pdf">Скачать</button>
+                    </div>
+                    
+                    <!-- документ 2 -->
+                    <div class="document-card">
+                        <h3 class="document-name">Отчёт за логистику май 2025</h3>
+                        <p class="document-filename">otchet-may-2025.pdf</p>
+                        <span class="document-date">04.06.2025</span>
+                        <button class="download-button" data-file="document2.pdf">Скачать</button>
+                    </div>
+                    
+                    <!-- документ 3 -->
+                    <div class="document-card">
+                        <h3 class="document-name">отчёт-пву-2025.pdf</h3>
+                        <p class="document-filename">otchet-pvu-2025.pdf</p>
+                        <span class="document-date">04.06.2025</span>
+                        <button class="download-button" data-file="document3.pdf">Скачать</button>
+                    </div>
+                    
+                </div>
+            </section>
+            
+        </main>
+
+        <!-- подвал сайта -->
+        <footer class="footer">
+            
+            <!-- левая колонка подвала -->
+            <div class="footer-column footer-left">
+                <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+            </div>
+            
+            <!-- центральная колонка подвала (навигация) -->
+            <div class="footer-column footer-center">
+                <nav class="footer-nav">
+                    <a href="index.html" class="footer-nav-button">Главная</a>
+                    <a href="tasks.html" class="footer-nav-button">Задачи</a>
+                    <a href="documents.html" class="footer-nav-button">Документы</a>
+                    <a href="contacts.html" class="footer-nav-button">Контакты</a>
+                    <a href="profile.html" class="footer-nav-button">Профиль</a>
+                    <a href="apanel.html" class="footer-nav-button">А-панель</a>
+                </nav>
+            </div>
+            
+            <!-- правая колонка подвала -->
+            <div class="footer-column footer-right">
+                <h3 class="footer-title">Политика</h3>
+                <p class="footer-text">2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
+            </div>
+            
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>

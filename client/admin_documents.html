@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ-панель — документы</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <link rel="stylesheet" href="/styles/admin_documents.css">
+</head>
+
+<body>
+<div class="site-container">
+
+  <header class="header">
+    <a href="/" class="logo-button">ДЕЛЬТА</a>
+    <p class="nav-link">Внутренний портал</p>
+    <div class="header-buttons">
+      <a href="notifications.html" class="action-button">Уведомления</a>
+      <a href="profile.html" class="action-button">Профиль</a>
+    </div>
+  </header>
+
+  <main class="main-content main-docs">
+
+    <section class="documents-header">
+      <h1 class="documents-title">Админ-панель (документы)</h1>
+    </section>
+
+    <section class="documents-sorting">
+      <div class="documents-filters" id="controls">
+
+        <div class="controls-block" data-kind="sort">
+          <button class="documents-filter active" data-sort="new">Новые</button>
+          <button class="documents-filter inactive" data-sort="old">Старые</button>
+          <button class="documents-filter inactive" data-sort="name">Имя</button>
+        </div>
+
+        <span class="controls-sep">|</span>
+
+        <div class="controls-block" data-kind="filter">
+          <button class="documents-filter active" data-filter="all">Все</button>
+          <button class="documents-filter inactive" data-filter="PDF">PDF</button>
+          <button class="documents-filter inactive" data-filter="DOC">DOC</button>
+          <button class="documents-filter inactive" data-filter="DOCX">DOCX</button>
+          <button class="documents-filter inactive" data-filter="XLS">XLS</button>
+          <button class="documents-filter inactive" data-filter="JPEG">JPEG</button>
+          <button class="documents-filter inactive" data-filter="PNG">PNG</button>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="documents-list">
+      <div class="documents-grid" id="documents-grid"></div>
+      <p id="doc-msg" class="documents-message"></p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-column footer-left">
+      <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+    </div>
+
+    <div class="footer-column footer-center">
+      <nav class="footer-nav">
+        <a href="index.html" class="footer-nav-button">Главная</a>
+        <a href="/tasks" class="footer-nav-button">Задачи</a>
+        <a href="documents.html" class="footer-nav-button">Документы</a>
+        <a href="contacts.html" class="footer-nav-button">Контакты</a>
+        <a href="profile.html" class="footer-nav-button">Профиль</a>
+        <a href="/admin_documents" class="footer-nav-button">А-панель</a>
+      </nav>
+    </div>
+
+    <div class="footer-right">
+      <h3 class="footer-title">Политика</h3>
+      <p class="footer-text">
+        2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.
+      </p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const grid = document.getElementById('documents-grid');
+  const msg = document.getElementById('doc-msg');
+  const controls = document.getElementById('controls');
+
+  let state = { sortBy: 'new', filterType: 'all' };
+
+  function setActive(groupSelector, dataAttr, value) {
+    const group = controls.querySelector(groupSelector);
+    group.querySelectorAll('.documents-filter').forEach(b => {
+      const v = b.getAttribute(dataAttr);
+      b.classList.toggle('active', v === value);
+      b.classList.toggle('inactive', v !== value);
+    });
+  }
+
+  function esc(s) {
+    return String(s ?? '')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString('ru-RU');
+  }
+
+  function cleanFileName(fileName) {
+    if (!fileName) return '';
+    return fileName.replace(/^\d+-/, '');
+  }
+
+  function render(docs) {
+    grid.innerHTML = '';
+    if (!docs.length) {
+      msg.textContent = 'Документов нет';
+      return;
+    }
+    msg.textContent = '';
+
+    docs.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'document-card';
+
+      card.innerHTML = `
+        <div class="document-date">${esc(fmtDate(d.createdAt || d.uploadDate))}</div>
+        <div class="document-name">${esc(d.name)}</div>
+        <div class="document-filename">${esc(cleanFileName(d.fileName))}</div>
+        <div class="document-owner">Владелец: ${esc(d.ownerName || '—')}</div>
+        <a class="download-button" href="/api/admin/documents/${d.id}/download">
+          Скачать
+        </a>
+      `;
+
+      grid.appendChild(card);
+    });
+  }
+
+  async function load() {
+    msg.textContent = 'Загрузка...';
+    const qs = new URLSearchParams();
+    qs.set('sortBy', state.sortBy);
+    if (state.filterType !== 'all') qs.set('type', state.filterType);
+
+    const res = await fetch('/api/admin/documents?' + qs.toString(), { credentials: 'include' });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      msg.textContent = data.error || 'Ошибка загрузки документов';
+      return;
+    }
+
+    render(Array.isArray(data) ? data : []);
+  }
+
+  controls.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+
+    if (btn.dataset.sort) {
+      state.sortBy = btn.dataset.sort;
+      setActive('[data-kind="sort"]','data-sort',state.sortBy);
+      load();
+    }
+
+    if (btn.dataset.filter) {
+      state.filterType = btn.dataset.filter;
+      setActive('[data-kind="filter"]','data-filter',state.filterType);
+      load();
+    }
+  });
+
+  load();
+</script>
+</body>
+</html>

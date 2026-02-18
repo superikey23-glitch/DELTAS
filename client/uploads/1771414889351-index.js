@@ -887,6 +887,36 @@ app.get('/admin_documents', (req, res) => {
   res.sendFile(path.join(clientPath, 'admin_documents.html'));
 });
 
+// ===== Admin Documents API (без owner, потому что в БД нет связи Document -> User) =====
+// app.get('/api/admin/documents', requireAuth, requireRole('admin'), async (req, res) => {
+//   try {
+//     const { sortBy, filter } = req.query;
+
+//     const where = {};
+//     if (filter && filter !== 'ALL') {
+//       where.fileType = String(filter).toUpperCase();
+//     }
+
+//     let order = [['createdAt', 'DESC']];
+
+//     if (sortBy === 'old') order = [['createdAt', 'ASC']];
+//     if (sortBy === 'name') order = [['name', 'ASC']];
+
+//     const rows = await Document.findAll({ where, order });
+
+//     res.json(rows.map(d => ({
+//       id: d.id,
+//       name: d.name,
+//       fileName: d.fileName,
+//       fileType: d.fileType,
+//       uploadDate: d.uploadDate,
+//       createdAt: d.createdAt
+//     })));
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500).json({ error: 'Ошибка получения документов' });
+//   }
+// });
 
 // Скачать документ по id
 app.get('/api/admin/documents/:id/download', requireAuth, requireRole('admin'), async (req, res) => {
@@ -1027,9 +1057,9 @@ app.use((req, res) => {
 
 
 /* =======================
-   Синхронизация БД и запуск сервера 0000 
+   Синхронизация БД и запуск сервера
 ======================= */
-sequelize.sync({ force: false }) 
+sequelize.sync({ force: true })
     .then(async () => {
         console.log('✅ База данных синхронизирована');
         

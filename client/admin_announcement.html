@@ -85,8 +85,10 @@
     let original = '';
 
     function clampValue(v) {
-      v = (v || '').replace(/\s+$/g, ''); // убираем хвостовые пробелы
-      if (v.length > MAX_CHARS) v = v.slice(0, MAX_CHARS);
+      v = v || '';
+      if (v.length > MAX_CHARS) {
+        v = v.slice(0, MAX_CHARS);
+      }
       return v;
     }
 
