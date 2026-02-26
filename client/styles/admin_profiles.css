@@ -1,0 +1,185 @@
+/* admin_profiles.css – frame 567765 */
+
+/* Заголовок */
+.page-title-section {
+  margin: 28px 0 18px;
+}
+
+.page-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  text-align: center;
+  color: #374151;
+}
+
+.status {
+  margin: 0 0 16px;
+  text-align: center;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* Сетка 2×N */
+.admin-board {
+  display: grid;
+  grid-template-columns: repeat(2, 458px);
+  column-gap: 59px; /* как в фигме */
+  row-gap: 78px;    /* как в фигме */
+  justify-content: center;
+  margin: 26px 0 42px;
+}
+
+/* Карточка профиля */
+.profile-card {
+  width: 458px;
+  height: 541px;
+  background: #FEF9C3;
+  border: 1px solid #E5E7EB;
+  border-radius: 15px;
+  box-sizing: border-box;
+  padding: 32px 33px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Поле (и в карточке, и в форме – одинаковое) */
+.profile-field {
+  width: 391.48px;
+  height: 55.318px;
+  border-radius: 15px;
+  border: 1px solid #E5E7EB;
+  background: #FFFFFF;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 20px;
+  color: #334230;
+  text-align: center;
+
+  padding: 0 12px;
+  margin: 0 auto 16px;
+}
+
+/* Инпуты формы выглядят как те же поля */
+.profile-input {
+  display: block;
+  justify-content: unset;
+  color: #374151;
+  text-align: center;
+  outline: none;
+}
+
+.profile-input::placeholder {
+  color: #9CA3AF;
+  font-weight: 700;
+}
+
+.profile-input:focus {
+  border-color: #EAB308;
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.18);
+}
+
+/* Кнопки в карточке */
+.profile-actions {
+  display: flex;
+  gap: 17px;
+  justify-content: flex-start;
+  margin-top: auto;
+}
+
+.profile-btn {
+  height: 50px;
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+  color: #FFFFFF;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-btn.edit {
+  width: 217px;
+  background: #EAB308;
+}
+
+.profile-btn.delete {
+  width: 158px;
+  background: #E92F00;
+}
+
+/* Плитка “новый профиль” */
+.new-profile-card {
+  width: 458px;
+  height: 541px;
+  background: #FEF9C3;
+  border: 2px dashed #EAB308;
+  border-radius: 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.plus-icon {
+  width: 76px;
+  height: 76px;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.plus-icon::before,
+.plus-icon::after {
+  content: "";
+  position: absolute;
+  background: #EAB308;
+  border-radius: 3px;
+}
+
+.plus-icon::before {
+  width: 6.333px;
+  height: 76px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.plus-icon::after {
+  width: 76px;
+  height: 6.333px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.new-profile-text {
+  font-weight: 600;
+  font-size: 26px;
+  color: #374151;
+  text-align: center;
+  text-transform: lowercase;
+}
+
+/* Адаптив */
+@media (max-width: 1040px) {
+  .admin-board {
+    grid-template-columns: 458px;
+    row-gap: 40px;
+  }
+}

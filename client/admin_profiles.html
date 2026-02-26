@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ-панель (профили)</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <link rel="stylesheet" href="/styles/admin_profiles.css">
+</head>
+
+<body>
+<div class="site-container">
+
+  <header class="header">
+    <a href="index.html" class="logo-button">ДЕЛЬТА</a>
+    <p class="nav-link">Внутренний портал</p>
+    <div class="header-buttons">
+      <a href="notifications.html" class="action-button">Уведомления</a>
+      <a href="profile.html" class="action-button">Профиль</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <section class="page-title-section">
+      <h1 class="page-title">Админ-панель (профили)</h1>
+    </section>
+
+    <p id="status" class="status" aria-live="polite"></p>
+
+    <!-- Общая сетка 2×N: первый элемент – новый профиль, дальше карточки -->
+    <section class="admin-board" id="boardGrid">
+      <!-- сюда JS вставит new tile и карточки -->
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-column footer-left">
+      <a href="privacy.doc" download class="privacy-link">Политика конфиденциальности</a>
+    </div>
+
+    <div class="footer-column footer-center">
+      <nav class="footer-nav">
+        <a href="index.html" class="footer-nav-button">Главная</a>
+        <a href="/tasks" class="footer-nav-button">Задачи</a>
+        <a href="documents.html" class="footer-nav-button">Документы</a>
+        <a href="contacts.html" class="footer-nav-button">Контакты</a>
+        <a href="profile.html" class="footer-nav-button">Профиль</a>
+        <a href="admin_profiles.html" class="footer-nav-button">А-панель</a>
+      </nav>
+    </div>
+
+    <div class="footer-right">
+      <h3 class="footer-title">Политика</h3>
+      <p class="footer-text">2025 © Все права защищены.<br>Внутренние стандарты безопасности и конфиденциальности.</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+let users = [];
+let editingCardEl = null;  // DOM-элемент карточки, которую заменили на форму
+let editingUser = null;    // данные пользователя для edit
+
+function setStatus(t){ $("status").textContent = t || ""; }
+
+async function apiJson(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
+  });
+
+  let data = null;
+  try { data = await res.json(); } catch (_) {}
+
+  if (!res.ok) {
+    if (res.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
+    throw new Error(data?.error || "Ошибка");
+  }
+
+  return data;
+}
+
+function escapeHtml(str){
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* ---------- UI элементы ---------- */
+
+function createNewTile(){
+  const tile = document.createElement("div");
+  tile.className = "new-profile-card";
+  tile.setAttribute("role", "button");
+  tile.tabIndex = 0;
+
+  tile.innerHTML = `
+    <div class="plus-icon" aria-hidden="true"></div>
+    <div class="new-profile-text">новый профиль</div>
+  `;
+
+  const open = () => openCreateInPlace(tile);
+  tile.onclick = open;
+  tile.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") open(); };
+
+  return tile;
+}
+
+/* форма всегда одинаковая по виду – как поля в карточке */
+function createFormCard(mode, values = {}) {
+  const form = document.createElement("form");
+  form.className = "profile-card profile-form";
+  form.dataset.mode = mode;
+  form.dataset.userId = values.id ?? "";
+
+  form.innerHTML = `
+    <input class="profile-field profile-input" name="fullname" type="text" placeholder="ФИО" required value="${escapeHtml(values.fullname || "")}">
+    <input class="profile-field profile-input" name="email" type="email" placeholder="Email" required value="${escapeHtml(values.email || "")}">
+    <input class="profile-field profile-input" name="phone" type="tel" placeholder="Номер телефона" required pattern="^\\+?[0-9]{10,15}$" title="Введите номер от 10 до 15 цифр, можно с + в начале" value="${escapeHtml(values.phone || "")}">
+    <input class="profile-field profile-input" name="position" type="text" placeholder="Должность" required value="${escapeHtml(values.position || "")}">
+    <select class="profile-field profile-input" name="role" required>
+      <option value="user" ${values.role === "user" ? "selected" : ""}>user</option>
+      <option value="admin" ${values.role === "admin" ? "selected" : ""}>admin</option>
+    </select>    
+    <input class="profile-field profile-input" name="username" type="text" placeholder="Логин" required value="${escapeHtml(values.username || "")}">
+    <input class="profile-field profile-input" name="password" type="password" placeholder="Пароль" ${mode === "create" ? "required" : ""}>
+
+    <div class="profile-actions">
+      <button class="profile-btn edit" type="submit">Сохранить</button>
+      <button class="profile-btn delete" type="button" data-cancel>Отмена</button>
+    </div>
+  `;
+
+  form.querySelector("[data-cancel]").onclick = () => cancelForm(form);
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    await submitForm(form);
+  };
+
+  return form;
+}
+
+function createProfileCard(u){
+  const card = document.createElement("div");
+  card.className = "profile-card";
+  card.dataset.userId = u.id;
+
+const fields = [
+  u.fullname,
+  u.email,
+  u.phone,
+  u.position,
+  "Роль: " + u.role,
+  "Логин: " + u.username
+];
+
+  card.innerHTML = `
+    ${fields.map(v => `<div class="profile-field">${escapeHtml(v)}</div>`).join("")}
+    <div class="profile-actions">
+      <button class="profile-btn edit" type="button">Редактировать</button>
+      <button class="profile-btn delete" type="button">Удалить</button>
+    </div>
+  `;
+
+  card.querySelector(".edit").onclick = () => openEditInPlace(card, u);
+  card.querySelector(".delete").onclick = () => deleteUser(u);
+
+  return card;
+}
+
+/* ---------- Поведение: создать вместо плитки ---------- */
+
+function openCreateInPlace(tileEl){
+  // если уже какая-то форма открыта – закрываем
+  closeAnyOpenForm();
+
+  const form = createFormCard("create", {});
+  tileEl.replaceWith(form);
+  editingCardEl = form;   // сейчас “форма” занимает место плитки
+  editingUser = null;
+}
+
+/* ---------- Поведение: редактировать вместо карточки ---------- */
+
+function openEditInPlace(cardEl, u){
+  closeAnyOpenForm();
+
+  const form = createFormCard("edit", u);
+  cardEl.replaceWith(form);
+
+  editingCardEl = form;   // форма на месте конкретной карточки
+  editingUser = u;
+}
+
+/* ---------- Закрытие формы (возврат на место) ---------- */
+
+function cancelForm(formEl){
+  const mode = formEl.dataset.mode;
+
+  if (mode === "create") {
+    // вернуть плитку “новый профиль” на это место
+    formEl.replaceWith(createNewTile());
+  } else {
+    // вернуть обратно карточку, которую редактировали
+    if (editingUser) formEl.replaceWith(createProfileCard(editingUser));
+  }
+
+  editingCardEl = null;
+  editingUser = null;
+  setStatus("");
+}
+
+function closeAnyOpenForm(){
+  if (!editingCardEl) return;
+  cancelForm(editingCardEl);
+}
+
+/* ---------- Отправка формы ---------- */
+
+async function submitForm(formEl){
+  const mode = formEl.dataset.mode;
+  const userId = formEl.dataset.userId;
+
+  const fd = new FormData(formEl);
+  const data = {
+    fullname: fd.get("fullname"),
+    email: fd.get("email"),
+    phone: fd.get("phone"),
+    position: fd.get("position"),
+    role: fd.get("role"),
+    username: fd.get("username"),
+    password: fd.get("password")
+  };
+
+  try {
+    if (mode === "create") {
+      await apiJson("/api/users", { method: "POST", body: JSON.stringify(data) });
+      // после создания возвращаем плитку
+      formEl.replaceWith(createNewTile());
+    } else {
+      if (!data.password) delete data.password;
+      await apiJson("/api/users/" + userId, { method: "PUT", body: JSON.stringify(data) });
+      // после редактирования возвращаем обновлённую карточку
+      const updated = { ...editingUser, ...data };
+      delete updated.password;
+      formEl.replaceWith(createProfileCard(updated));
+    }
+
+    editingCardEl = null;
+    editingUser = null;
+    setStatus("");
+    await loadUsers(true); // обновим список с сервера
+  } catch (err) {
+    setStatus(err.message || "Ошибка");
+  }
+}
+
+/* ---------- Удаление ---------- */
+
+async function deleteUser(u){
+  if(!confirm("Удалить профиль " + (u.fullname || "") + "?")) return;
+  await apiJson("/api/users/" + u.id, { method:"DELETE" });
+  await loadUsers(true);
+}
+
+/* ---------- Рендер всей доски ---------- */
+
+function renderBoard(){
+  const board = $("boardGrid");
+  board.innerHTML = "";
+
+  // 1 элемент – плитка “новый профиль”
+  board.appendChild(createNewTile());
+
+  // остальные – карточки
+  users.forEach(u => board.appendChild(createProfileCard(u)));
+}
+
+async function loadUsers(keepOpenForm = false){
+  try{
+    users = await apiJson("/api/users");
+
+    // если в момент обновления была открыта форма – оставляем её на месте
+    // проще всего: перерисовать всё и заново открыть форму там же не надо,
+    // поэтому keepOpenForm=false лучше. Но ты просил логику "на месте" – поэтому keepOpenForm=true
+    // делаем так: если формы нет – обычный render, если есть – не трогаем DOM.
+    if (!keepOpenForm || !editingCardEl) {
+      renderBoard();
+      return;
+    }
+
+    // если форма открыта, то обновляем только карточки вокруг:
+    // самый надёжный вариант – всё перерисовать, а форму закрыть не трогая UX
+    // но тогда форма исчезнет. Поэтому оставляем как есть – список обновится после закрытия/сохранения.
+  }catch(e){
+    setStatus(e.message);
+  }
+}
+
+/* init */
+loadUsers();
+</script>
+
+</body>
+</html>

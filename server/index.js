@@ -91,25 +91,19 @@ const User = sequelize.define('User', {
 });
 
 const Task = sequelize.define('Task', {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    },
-    priority: {
-        type: DataTypes.STRING,
-        defaultValue: 'Средний'
-    },
-    deadline: {
-        type: DataTypes.DATE,
-        allowNull: true
-    }
+  title: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: true },
+  priority: { type: DataTypes.STRING, defaultValue: 'Средний' },
+  deadline: { type: DataTypes.DATE, allowNull: true },
+
+  userId: { type: DataTypes.INTEGER, allowNull: false } // ← ВАЖНО
 }, {
-    timestamps: true
+  timestamps: true
 });
+
+// связь
+Task.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
+User.hasMany(Task, { foreignKey: 'userId' });
 
 const Document = sequelize.define('Document', {
     name: {
@@ -164,9 +158,7 @@ function generateToken() {
 
 // Middleware для проверки аутентификации
 async function requireAuth(req, res, next) {
-    const token =
-        req.headers.authorization?.replace('Bearer ', '') ||
-        req.cookies?.token;
+    const token = req.cookies?.token;
 
     if (!token) {
         return res.status(401).json({ error: 'Требуется аутентификация' });
@@ -191,9 +183,9 @@ async function requireAuth(req, res, next) {
         role: session.User.role
     };
 
-    req.token = token;
     next();
 }
+
 
 
 // Middleware для проверки ролей
@@ -227,6 +219,7 @@ async function createDefaultUsers() {
         username: '123',
         password: bcrypt.hashSync('123', 10)
     });
+
 
     console.log('✅ Создан основной пользователь');
 }
@@ -334,115 +327,127 @@ app.get('/profile', (req, res) => {
 
 
 // Получение всех пользователей (только для админов)
-app.get('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
-    const users = await User.findAll({
-        attributes: ['id', 'fullname', 'username', 'role'],
-        order: [['id', 'ASC']]
-    });
+// Получение всех пользователей (только для админов) — ПОЛНЫЕ ПОЛЯ
+// app.get('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
+//   try {
+//     const users = await User.findAll({
+//       attributes: ['id', 'fullname', 'email', 'phone', 'position', 'role', 'username'],
+//       order: [['id', 'ASC']]
+//     });
 
-    res.json(users.map(u => ({
-        id: u.id,
-        fullname: u.fullname || u.username,  // <-- вот ключевой момент
-        username: u.username,
-        role: u.role
-    })));
-});
+//     res.json(users);
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500).json({ error: 'Ошибка загрузки пользователей' });
+//   }
+// });
 
 
-// Создание нового пользователя (только для админов)
-app.post('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
-    try {
-        const { username, password, role } = req.body;
-        
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Логин и пароль обязательны' });
-        }
-        
-        const existing = await User.findOne({ where: { username } });
-        if (existing) {
-            return res.status(400).json({ error: 'Пользователь уже существует' });
-        }
-        
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        const user = await User.create({
-            username,
-            password: hashedPassword,
-            role: role || 'client'
-        });
-        
-        res.status(201).json({
-            id: user.id,
-            username: user.username,
-            role: user.role,
-            createdAt: user.createdAt
-        });
-    } catch (error) {
-        console.error('Ошибка создания пользователя:', error);
-        res.status(500).json({ error: 'Ошибка создания пользователя' });
-    }
-});
+// // Создание нового пользователя (только для админов)
+// app.post('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
+//   try {
+//     const { fullname, email, phone, position, role, username, password } = req.body;
+
+//     if (!fullname || !email || !phone || !position || !role || !username || !password) {
+//       return res.status(400).json({ error: 'Заполни все поля' });
+//     }
+
+//     const existing = await User.findOne({ where: { username } });
+//     if (existing) {
+//       return res.status(400).json({ error: 'Логин уже занят' });
+//     }
+
+//     const hashedPassword = bcrypt.hashSync(password, 10); // у тебя bcryptjs
+
+//     const user = await User.create({
+//       fullname,
+//       email,
+//       phone,
+//       position,
+//       role,
+//       username,
+//       password: hashedPassword
+//     });
+
+//     res.status(201).json({
+//       id: user.id,
+//       fullname: user.fullname,
+//       email: user.email,
+//       phone: user.phone,
+//       position: user.position,
+//       role: user.role,
+//       username: user.username
+//     });
+//   } catch (error) {
+//     console.error('Ошибка создания пользователя:', error);
+//     res.status(500).json({ error: 'Ошибка создания пользователя' });
+//   }
+// });
 
 /* =======================
    API для задач (требуется аутентификация)
 ======================= */
 app.get('/api/tasks', requireAuth, async (req, res) => {
-    const { sortBy } = req.query;
+  const { sortBy } = req.query;
 
-    let order = [['createdAt', 'DESC']];
+  let order = [['createdAt', 'DESC']];
+  if (sortBy === 'old') order = [['createdAt', 'ASC']];
+  if (sortBy === 'deadline') order = [['deadline', 'ASC']];
+  if (sortBy === 'priority') {
+    order = [[
+      sequelize.literal(`
+        CASE priority
+          WHEN 'Высокий' THEN 3
+          WHEN 'Средний' THEN 2
+          WHEN 'Низкий' THEN 1
+          ELSE 0
+        END
+      `),
+      'DESC'
+    ]];
+  }
 
-    if (sortBy === 'old') {
-        order = [['createdAt', 'ASC']];
-    }
+  const where = { userId: req.user.id };
 
-    if (sortBy === 'deadline') {
-        order = [['deadline', 'ASC']];
-    }
-
-    if (sortBy === 'priority') {
-        order = [[
-            sequelize.literal(`
-                CASE priority
-                    WHEN 'Высокий' THEN 3
-                    WHEN 'Средний' THEN 2
-                    WHEN 'Низкий' THEN 1
-                    ELSE 0
-                END
-            `),
-            'DESC'
-        ]];
-    }
-
-    const tasks = await Task.findAll({ order });
-    res.json(tasks);
+  const tasks = await Task.findAll({ where, order });
+  res.json(tasks);
 });
 
 app.post('/api/tasks', requireAuth, async (req, res) => {
-    try {
-        const task = await Task.create(req.body);
-        res.status(201).json(task);
-    } catch (e) {
-        res.status(400).json({ error: 'Ошибка создания задачи' });
-    }
+  try {
+    const task = await Task.create({
+      ...req.body,
+      userId: req.user.id
+    });
+    res.status(201).json(task);
+  } catch (e) {
+    res.status(400).json({ error: 'Ошибка создания задачи' });
+  }
 });
 
 app.put('/api/tasks/:id', requireAuth, async (req, res) => {
-    const task = await Task.findByPk(req.params.id);
-    if (!task) {
-        return res.status(404).json({ error: 'Задача не найдена' });
-    }
+  const task = await Task.findByPk(req.params.id);
+  if (!task) return res.status(404).json({ error: 'Задача не найдена' });
 
-    await task.update(req.body);
-    res.json(task);
+  // владелец или админ
+  if (req.user.role !== 'admin' && task.userId !== req.user.id) {
+    return res.status(403).json({ error: 'Доступ запрещен' });
+  }
+
+  await task.update(req.body);
+  res.json(task);
 });
 
 app.delete('/api/tasks/:id', requireAuth, async (req, res) => {
-    const task = await Task.findByPk(req.params.id);
-    if (!task) {
-        return res.status(404).json({ error: 'Задача не найдена' });
-    }
+  const task = await Task.findByPk(req.params.id);
+  if (!task) return res.status(404).json({ error: 'Задача не найдена' });
 
-    await task.destroy();
-    res.json({ success: true });
+  if (req.user.role !== 'admin' && task.userId !== req.user.id) {
+    return res.status(403).json({ error: 'Доступ запрещен' });
+  }
+
+  await task.destroy();
+  res.json({ success: true });
 });
 
 /* =======================
@@ -457,71 +462,81 @@ app.post('/upload', requireAuth, upload.single('file'), (req, res) => {
     res.json({ fileName: req.file.filename });
 });
 
-// Скачивание файла (требуется аутентификация)
-app.get('/download/:fileName', requireAuth, (req, res) => {
-    const filePath = path.join(__dirname, '..', 'client', 'uploads', req.params.fileName);
-    if (fs.existsSync(filePath)) {
-        res.download(filePath);
-    } else {
-        res.status(404).json({ error: 'Файл не найден' });
+app.get('/download/:fileName', requireAuth, async (req, res) => {
+  try {
+    const fileName = req.params.fileName;
+
+    const doc = await Document.findOne({ where: { fileName } });
+    if (!doc) return res.status(404).json({ error: 'Файл не найден' });
+
+    if (req.user.role !== 'admin' && doc.userId !== req.user.id) {
+      return res.status(403).json({ error: 'Доступ запрещен' });
     }
+
+    const filePath = path.join(__dirname, '..', 'client', doc.filePath);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Файл не найден' });
+
+    res.download(filePath, doc.fileName);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Ошибка скачивания' });
+  }
 });
 
 // Получение документа по ID
 app.get('/api/documents/:id', requireAuth, async (req, res) => {
-    try {
-        const document = await Document.findByPk(req.params.id);
-        if (!document) {
-            return res.status(404).json({ error: 'Документ не найден' });
-        }
-        res.json(document);
-    } catch (e) {
-        console.error(e);
-        res.status(400).json({ error: 'Ошибка получения документа' });
-    }
+  const where = { id: Number(req.params.id) };
+
+  if (req.user.role !== 'admin') {
+    where.userId = req.user.id;
+  }
+
+  const document = await Document.findOne({ where });
+
+  if (!document) {
+    return res.status(404).json({ error: 'Документ не найден' });
+  }
+
+  res.json(document);
 });
 
 // Получение всех документов с сортировкой
 app.get('/api/documents', requireAuth, async (req, res) => {
-    try {
-        const { sortBy } = req.query;
+  try {
+    const { sortBy } = req.query;
 
-        let order = [['createdAt', 'DESC']];
+    let order = [['createdAt', 'DESC']];
 
-        // сортировка по имени
-        if (sortBy === 'name') {
-            order = [['name', 'ASC']];
-        }
+    if (sortBy === 'name') order = [['name', 'ASC']];
 
-        // сортировка по типу файла
-        if (['pdf', 'doc', 'docx', 'xls', 'png', 'jpeg'].includes(sortBy)) {
-            order = [
-                [
-                    sequelize.literal(`
-                        CASE
-                            WHEN fileType = '${sortBy.toUpperCase()}' THEN 0
-                            WHEN fileType = 'DOC'  THEN 1
-                            WHEN fileType = 'DOCX' THEN 2
-                            WHEN fileType = 'PDF'  THEN 3
-                            WHEN fileType = 'XLS'  THEN 4
-                            WHEN fileType = 'PNG'  THEN 5
-                            WHEN fileType = 'JPEG' THEN 6
-                            ELSE 7
-                        END
-                    `),
-                    'ASC'
-                ],
-                ['createdAt', 'DESC']
-            ];
-        }
-
-        const documents = await Document.findAll({ order });
-        res.json(documents);
-    } catch (e) {
-        console.error(e);
-        res.status(400).json({ error: 'Ошибка получения документов' });
+    if (['pdf', 'doc', 'docx', 'xls', 'png', 'jpeg'].includes(sortBy)) {
+      order = [
+        [sequelize.literal(`
+          CASE
+            WHEN fileType = '${sortBy.toUpperCase()}' THEN 0
+            WHEN fileType = 'DOC'  THEN 1
+            WHEN fileType = 'DOCX' THEN 2
+            WHEN fileType = 'PDF'  THEN 3
+            WHEN fileType = 'XLS'  THEN 4
+            WHEN fileType = 'PNG'  THEN 5
+            WHEN fileType = 'JPEG' THEN 6
+            ELSE 7
+          END
+        `), 'ASC'],
+        ['createdAt', 'DESC']
+      ];
     }
+
+   const where = { userId: req.user.id };
+
+    const documents = await Document.findAll({ where, order });
+    res.json(documents);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ error: 'Ошибка получения документов' });
+  }
 });
+
 
 // Создание документа с поддержкой кириллицы - пока уберем
 // app.post('/api/documents', requireAuth, async (req, res) => {
@@ -558,43 +573,39 @@ app.get('/api/documents', requireAuth, async (req, res) => {
 
 // Обновление документа
 app.put('/api/documents/:id', requireAuth, async (req, res) => {
-    try {
-        const document = await Document.findByPk(req.params.id);
-        if (!document) {
-            return res.status(404).json({ error: 'Документ не найден' });
-        }
+  const where = { id: Number(req.params.id) };
 
-        await document.update(req.body);
-        res.json(document);
-    } catch (e) {
-        console.error(e);
-        res.status(400).json({ error: 'Ошибка обновления документа' });
-    }
+  if (req.user.role !== 'admin') {
+    where.userId = req.user.id;
+  }
+
+  const document = await Document.findOne({ where });
+
+  if (!document) {
+    return res.status(404).json({ error: 'Документ не найден' });
+  }
+
+  await document.update(req.body);
+  res.json(document);
 });
 
 // Удаление документа
 app.delete('/api/documents/:id', requireAuth, async (req, res) => {
-    try {
-        const document = await Document.findByPk(req.params.id);
-        if (!document) {
-            return res.status(404).json({ error: 'Документ не найден' });
-        }
+  const where = { id: Number(req.params.id) };
 
-        // Удаляем файл с диска
-        const filePath = path.join(__dirname, '..', 'client', document.filePath);
-        
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
+  if (req.user.role !== 'admin') {
+    where.userId = req.user.id;
+  }
 
-        await document.destroy();
-        res.json({ success: true });
-    } catch (e) {
-        console.error(e);
-        res.status(400).json({ error: 'Ошибка удаления документа' });
-    }
+  const document = await Document.findOne({ where });
+
+  if (!document) {
+    return res.status(404).json({ error: 'Документ не найден' });
+  }
+
+  await document.destroy();
+  res.json({ success: true });
 });
-
 /* =======================
    Страницы (с проверкой аутентификации)
 ======================= */
@@ -1009,7 +1020,115 @@ app.get('/api/admin/documents', requireAuth, requireRole('admin'), async (req, r
    КОНЕЦ БЛОКА
 ======================= */
 
+// ===== USERS (ADMIN) =====
+// ===== USERS (ADMIN) =====
 
+// Отдать полный список пользователей (без пароля)
+app.get("/api/users", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["id", "fullname", "email", "phone", "position", "role", "username"],
+      order: [["id", "ASC"]],
+    });
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Ошибка загрузки пользователей" });
+  }
+});
+
+// Создание пользователя
+app.post("/api/users", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    const { fullname, email, phone, position, role, username, password } = req.body;
+
+    if (!fullname || !email || !phone || !position || !role || !username || !password) {
+      return res.status(400).json({ error: "Заполни все поля" });
+    }
+
+    const exists = await User.findOne({ where: { username } });
+    if (exists) return res.status(400).json({ error: "Логин уже занят" });
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    const user = await User.create({
+      fullname,
+      email,
+      phone,
+      position,
+      role,
+      username,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+      phone: user.phone,
+      position: user.position,
+      role: user.role,
+      username: user.username,
+    });
+  } catch (err) {
+    console.error("Ошибка создания пользователя:", err);
+    res.status(500).json({ error: "Ошибка создания пользователя" });
+  }
+});
+
+// Редактирование пользователя
+// Пароль меняется только если передан
+app.put("/api/users/:id", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+
+    const { fullname, email, phone, position, role, username, password } = req.body;
+
+    if (fullname !== undefined) user.fullname = fullname;
+    if (email !== undefined) user.email = email;
+    if (phone !== undefined) user.phone = phone;
+    if (position !== undefined) user.position = position;
+    if (role !== undefined) user.role = role;
+    if (username !== undefined) user.username = username;
+
+    if (password) {
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      user.password = hashedPassword;
+    }
+
+    await user.save();
+
+    res.json({
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+      phone: user.phone,
+      position: user.position,
+      role: user.role,
+      username: user.username,
+    });
+  } catch (err) {
+    console.error("Ошибка обновления пользователя:", err);
+    res.status(500).json({ error: "Ошибка обновления пользователя" });
+  }
+});
+
+// Удаление пользователя
+app.delete("/api/users/:id", requireAuth, requireRole("admin"), async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ error: "Пользователь не найден" });
+
+    await user.destroy();
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("Ошибка удаления пользователя:", err);
+    res.status(500).json({ error: "Ошибка удаления пользователя" });
+  }
+});
 
 /* =======================
    404
