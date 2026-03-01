@@ -88,6 +88,55 @@
     justify-content: center;
 }
 
+.document-create-trigger {
+    background: #FEF9C3;
+    border: 2px dashed #EAB308;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    cursor: pointer;
+}
+
+.document-create-plus {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    display: block;
+}
+
+.document-create-plus::before,
+.document-create-plus::after {
+    content: '';
+    position: absolute;
+    background: #EAB308;
+    border-radius: 2px;
+}
+
+.document-create-plus::before {
+    width: 48px;
+    height: 4px;
+    top: 22px;
+    left: 0;
+}
+
+.document-create-plus::after {
+    width: 4px;
+    height: 48px;
+    top: 0;
+    left: 22px;
+}
+
+.document-create-text {
+    font-weight: 600;
+    font-size: 18px;
+    color: #374151;
+    text-align: center;
+}
+
 
 /* =========================
    КАРТОЧКА ДОКУМЕНТА
@@ -223,15 +272,9 @@
    СОЗДАНИЕ ДОКУМЕНТА
 ========================= */
 
-.documents-create {
-    display: flex;
-    justify-content: center;
-}
-
 .document-card--create {
     width: 525px;
     height: auto;
-    margin: 0 auto;
 }
 
 .document-create-title {

@@ -63,50 +63,44 @@
         <!-- СЕТКА ДОКУМЕНТОВ -->
         <section class="documents-section documents-list">
             <div class="documents-grid" id="documents-grid">
+                <button
+                    id="open-create-form"
+                    class="document-card document-create-trigger"
+                    type="button">
+                    <span class="document-create-plus" aria-hidden="true"></span>
+                    <span class="document-create-text">Добавить документ</span>
+                </button>
+
+                <div
+                    class="document-create-card document-card document-card--create"
+                    id="create-form"
+                    style="display:none;">
+
+                    <h3 class="document-create-title">Новый документ</h3>
+
+                    <input
+                        type="text"
+                        id="new-name"
+                        class="document-input"
+                        placeholder="Название документа">
+
+                    <input
+                        type="file"
+                        id="new-file"
+                        class="document-input">
+
+                    <div class="create-actions document-actions">
+                        <button class="document-btn document-btn--save" id="create-btn">
+                            Создать
+                        </button>
+                        <button class="document-btn document-btn--cancel" id="cancel-create">
+                            Отмена
+                        </button>
+                    </div>
+
+                </div>
                 <!-- Карточки документов (JS) -->
             </div>
-        </section>
-
-        <!-- СОЗДАНИЕ ДОКУМЕНТА -->
-        <section class="documents-section documents-create">
-
-            <!-- КНОПКА ОТКРЫТИЯ -->
-            <button
-                id="open-create-form"
-                class="action-button add-document-btn">
-                + Добавить документ
-            </button>
-
-            <!-- ФОРМА СОЗДАНИЯ (СКРЫТА) -->
-            <div
-                class="document-create-card document-card document-card--create"
-                id="create-form"
-                style="display:none;">
-
-                <h3 class="document-create-title">Новый документ</h3>
-
-                <input
-                    type="text"
-                    id="new-name"
-                    class="document-input"
-                    placeholder="Название документа">
-
-                <input
-                    type="file"
-                    id="new-file"
-                    class="document-input">
-
-                <div class="create-actions document-actions">
-                    <button class="document-btn document-btn--save" id="create-btn">
-                        Создать
-                    </button>
-                    <button class="document-btn document-btn--cancel" id="cancel-create">
-                        Отмена
-                    </button>
-                </div>
-
-            </div>
-
         </section>
 
     </main>
