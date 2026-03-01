@@ -40,24 +40,33 @@
     <main class="main-content documents-page">
 
         <!-- Заголовок страницы -->
-        <section class="documents-section documents-header">
+        <section class=" documents-header">
             <h1 class="section-title documents-title">Документы</h1>
         </section>
 
         <!-- СОРТИРОВКА -->
-        <section class="documents-section documents-sorting">
-            <div class="documents-filters">
+        <section class="documents-sorting">
+        <div class="documents-filters" id="controls">
 
-                <button class="documents-filter active" data-sort="new">Новые</button>
-                <button class="documents-filter inactive" data-sort="name">Имя</button>
-                <button class="documents-filter inactive" data-sort="PDF">PDF</button>
-                <button class="documents-filter inactive" data-sort="DOC">DOC</button>
-                <button class="documents-filter inactive" data-sort="DOCX">DOCX</button>
-                <button class="documents-filter inactive" data-sort="XLS">XLS</button>
-                <button class="documents-filter inactive" data-sort="PNG">PNG</button>
-                <button class="documents-filter inactive" data-sort="JPEG">JPEG</button>
-
+            <div class="controls-block" data-kind="sort">
+            <button type="button" class="documents-filter active" data-sort="new">Новые</button>
+            <button type="button" class="documents-filter inactive" data-sort="old">Старые</button>
+            <button type="button" class="documents-filter inactive" data-sort="name">Имя</button>
             </div>
+
+            <span class="controls-sep">|</span>
+
+            <div class="controls-block" data-kind="filter">
+            <button type="button" class="documents-filter active" data-filter="all">Все</button>
+            <button type="button" class="documents-filter inactive" data-filter="PDF">PDF</button>
+            <button type="button" class="documents-filter inactive" data-filter="DOC">DOC</button>
+            <button type="button" class="documents-filter inactive" data-filter="DOCX">DOCX</button>
+            <button type="button" class="documents-filter inactive" data-filter="XLS">XLS</button>
+            <button type="button" class="documents-filter inactive" data-filter="JPEG">JPEG</button>
+            <button type="button" class="documents-filter inactive" data-filter="PNG">PNG</button>
+            </div>
+
+        </div>
         </section>
 
         <!-- СЕТКА ДОКУМЕНТОВ -->
@@ -71,11 +80,20 @@
         <section class="documents-section documents-create">
 
             <!-- КНОПКА ОТКРЫТИЯ -->
-            <button
-                id="open-create-form"
-                class="action-button add-document-btn">
-                + Добавить документ
-            </button>
+            <div id="documents-grid" class="documents-grid">
+            <div id="open-create-form" class="document-card new-document-card" role="button" tabindex="0">
+                <div class="new-card-inner">
+                <div class="plus-icon" aria-hidden="true">
+                    <div class="plus-horizontal"></div>
+                    <div class="plus-vertical"></div>
+                </div>
+                <div class="new-card-text">Добавить документ</div>
+                </div>
+            </div>
+
+            <!-- ⚠️ create-form НЕ МЕНЯЕМ (он уже есть в твоём HTML) -->
+            <!-- просто оставь его как есть, скрипт сам будет вставлять/убирать его из grid -->
+            </div>
 
             <!-- ФОРМА СОЗДАНИЯ (СКРЫТА) -->
             <div
@@ -115,7 +133,7 @@
     <footer class="footer">
 
         <div class="footer-column footer-left">
-            <a href="privacy.doc" download class="privacy-link">
+            <a href="img/privacy.docx" download class="privacy-link">
                 Политика конфиденциальности
             </a>
         </div>
@@ -134,7 +152,7 @@
         <div class="footer-right">
             <h3 class="footer-title">Политика</h3>
             <p class="footer-text">
-                2025 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.
+                2026 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.
             </p>
         </div>
 

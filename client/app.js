@@ -223,15 +223,16 @@ function renderTasks(tasks) {
 
     tasksGrid.innerHTML = '';
 
+    // добавление карточки для новой задачи
+    const newTaskCard = createTaskCard({}, true);
+    tasksGrid.appendChild(newTaskCard);
+
     // создание карточек для всех задач
     tasks.forEach(task => {
         const taskCard = createTaskCard(task, false);
         tasksGrid.appendChild(taskCard);
     });
 
-    // добавление карточки для новой задачи
-    const newTaskCard = createTaskCard({}, true);
-    tasksGrid.appendChild(newTaskCard);
 }
 
 // создание карточки задачи (новая или существующая)
@@ -249,7 +250,7 @@ function createTaskCard(task, isNew = false) {
                     <div class="plus-horizontal"></div>
                     <div class="plus-vertical"></div>
                 </div>
-                <p class="new-card-text">добавление новой задачи</p>
+                <p class="new-card-text">Добавить новую задачу</p>
             </div>
         `;
     } else {

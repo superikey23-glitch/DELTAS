@@ -327,8 +327,15 @@
 }
 
 /* просроченные задачи */
-.task-card.deadline-overdue .card-inner {
-    border: 2.5px solid #ff0000;
-    background: rgba(127, 29, 29, 0.08);
+/* Просроченные задачи */
+.task-card.deadline-overdue {
+    background: #FEE2E2;
+    border: 2px solid #DC2626;
 }
-/*проверка*/
+
+/* Заголовок просроченной задачи */
+.task-card.deadline-overdue .task-field.title,
+.task-card.deadline-overdue .task-field[data-field="title"] {
+    color: #B91C1C !important;
+    font-weight: 700;
+}
