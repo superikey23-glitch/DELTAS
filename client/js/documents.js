@@ -25,6 +25,16 @@ async function loadDocuments() {
 function renderDocuments(documents) {
     grid.innerHTML = '';
 
+    if (activeMode === 'create') {
+        form.style.display = 'flex';
+        openBtn.style.display = 'none';
+        grid.appendChild(form);
+    } else {
+        form.style.display = 'none';
+        openBtn.style.display = 'flex';
+        grid.appendChild(openBtn);
+    }
+
     documents.forEach(doc => {
         const card = document.createElement('div');
         card.className = 'document-card';
@@ -192,9 +202,8 @@ if (openBtn && form) {
         form.style.display = 'flex';
         openBtn.style.display = 'none';
 
-        // добавление формы в сетку при необходимости
-        if (!grid.contains(form)) {
-            grid.appendChild(form);
+        if (grid.contains(openBtn)) {
+            grid.replaceChild(form, openBtn);
         }
     });
 }
@@ -203,11 +212,11 @@ if (openBtn && form) {
 if (cancelBtn && form) {
     cancelBtn.addEventListener('click', () => {
         form.style.display = 'none';
-        openBtn.style.display = 'inline-block';
+        openBtn.style.display = 'flex';
         activeMode = null;
 
         if (grid.contains(form)) {
-            grid.removeChild(form);
+            grid.replaceChild(openBtn, form);
         }
 
         // очистка полей
@@ -269,10 +278,10 @@ document.getElementById('create-btn').addEventListener('click', async () => {
 
         // скрытие формы
         form.style.display = 'none';
-        openBtn.style.display = 'inline-block';
+        openBtn.style.display = 'flex';
 
         if (grid.contains(form)) {
-            grid.removeChild(form);
+            grid.replaceChild(openBtn, form);
         }
 
         // сброс режима
