@@ -363,15 +363,26 @@ function handleTaskCardClick(event) {
 
 // включение режима редактирования
 function enableEditMode(card) {
-    card.querySelector('.card-inner').style.backgroundColor = '#FFFFFF';
-    card.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
-    card.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
-    card.querySelector('.edit-btn').style.display = 'none';
-    card.querySelector('.delete-btn').style.display = 'none';
-    card.querySelector('.save-btn').style.display = 'block';
-    card.querySelector('.cancel-btn').style.display = 'block';
-}
+  const tasksGrid = document.getElementById('tasksGrid');
 
+  // ✅ закрыть все открытые редакторы (кроме текущего)
+  if (tasksGrid) {
+    tasksGrid.querySelectorAll('.task-card').forEach(c => {
+      if (c !== card && c.querySelector('.edit-mode')?.style.display === 'block') {
+        disableEditMode(c);
+      }
+    });
+  }
+
+  // открыть текущий
+  card.querySelector('.card-inner').style.backgroundColor = '#FFFFFF';
+  card.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
+  card.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
+  card.querySelector('.edit-btn').style.display = 'none';
+  card.querySelector('.delete-btn').style.display = 'none';
+  card.querySelector('.save-btn').style.display = 'block';
+  card.querySelector('.cancel-btn').style.display = 'block';
+}
 // выключение режима редактирования
 function disableEditMode(card) {
     card.querySelector('.card-inner').style.backgroundColor = '';
