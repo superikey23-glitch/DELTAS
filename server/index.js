@@ -450,6 +450,22 @@ app.delete('/api/tasks/:id', requireAuth, async (req, res) => {
   res.json({ success: true });
 });
 
+
+function resolveUploadPathSafe(filePath) {
+  const clientRoot = path.join(__dirname, '..', 'client');
+  const uploadsRoot = path.join(clientRoot, 'uploads');
+
+  const fullPath = path.normalize(path.join(clientRoot, filePath || ''));
+
+  // защита от выхода за uploads (на всякий случай)
+  const uploadsRootWithSep = uploadsRoot.endsWith(path.sep) ? uploadsRoot : uploadsRoot + path.sep;
+  if (!fullPath.startsWith(uploadsRootWithSep) && fullPath !== uploadsRoot) {
+    return null;
+  }
+
+  return fullPath;
+}
+
 /* =======================
    API для документов (требуется аутентификация)
 ======================= */
@@ -590,6 +606,7 @@ app.put('/api/documents/:id', requireAuth, async (req, res) => {
 });
 
 // Удаление документа
+// Удаление документа + физического файла
 app.delete('/api/documents/:id', requireAuth, async (req, res) => {
   const where = { id: Number(req.params.id) };
 
@@ -603,7 +620,27 @@ app.delete('/api/documents/:id', requireAuth, async (req, res) => {
     return res.status(404).json({ error: 'Документ не найден' });
   }
 
+  // 1) удаляем файл с диска (если он есть)
+  const fullPath = resolveUploadPathSafe(document.filePath);
+
+  if (fullPath) {
+    try {
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+      }
+    } catch (e) {
+      // если файл уже удалён — ок, иначе логируем и продолжаем
+      if (e?.code !== 'ENOENT') {
+        console.error('Ошибка удаления файла:', e);
+      }
+    }
+  } else {
+    console.warn('Подозрительный filePath, пропускаю удаление файла:', document.filePath);
+  }
+
+  // 2) удаляем запись из БД
   await document.destroy();
+
   res.json({ success: true });
 });
 /* =======================

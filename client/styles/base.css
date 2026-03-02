@@ -40,3 +40,35 @@ textarea {
     flex-direction: column;
     min-height: calc(100vh - 40px);
 }
+
+/* =========================
+затемнение доп.
+========================= */
+
+.document-btn,
+.document-btn-wide,
+.documents-filter,
+.aa-btn,
+.an-btn,
+.profile-btn {
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.05s ease;
+}
+
+.document-btn:hover,
+.document-btn-wide:hover,
+.documents-filter:hover,
+.aa-btn:hover,
+.an-btn:hover,
+.profile-btn:hover {
+  filter: brightness(0.92);
+}
+
+.document-btn:active,
+.document-btn-wide:active,
+.documents-filter:active,
+.aa-btn:active,
+.an-btn:active,
+.profile-btn:active {
+  transform: translateY(1px);
+}
