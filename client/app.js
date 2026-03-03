@@ -361,11 +361,27 @@ function handleTaskCardClick(event) {
     }
 }
 
+function closeNewTaskCardIfOpen() {
+  const tasksGrid = document.getElementById('tasksGrid');
+  if (!tasksGrid) return;
+
+  // Открытая "карточка создания" — это task-card с data-id="new", но НЕ .new-task-card (плитка)
+  const openNewCard = tasksGrid.querySelector('.task-card[data-id="new"]:not(.new-task-card)');
+  if (!openNewCard) return;
+
+  // Возвращаем плитку "Добавить новую задачу"
+  const newTaskTile = createTaskCard({}, true);
+  openNewCard.replaceWith(newTaskTile);
+}
+
+
 // включение режима редактирования
 function enableEditMode(card) {
+  closeNewTaskCardIfOpen(); // ✅ закрываем создание, если оно открыто
+
   const tasksGrid = document.getElementById('tasksGrid');
 
-  // ✅ закрыть все открытые редакторы (кроме текущего)
+  // дальше твой код без изменений...
   if (tasksGrid) {
     tasksGrid.querySelectorAll('.task-card').forEach(c => {
       if (c !== card && c.querySelector('.edit-mode')?.style.display === 'block') {
@@ -374,7 +390,6 @@ function enableEditMode(card) {
     });
   }
 
-  // открыть текущий
   card.querySelector('.card-inner').style.backgroundColor = '#FFFFFF';
   card.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
   card.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');

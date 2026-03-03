@@ -339,3 +339,33 @@
     color: #B91C1C !important;
     font-weight: 700;
 }
+
+/* =========================
+   TASKS BUTTON COLORS — unified with project
+   (меняем только цвет, размер остаётся прежний)
+========================= */
+
+/* primary (Редактировать, Сохранить) */
+.task-card .edit-btn,
+.task-card .save-btn {
+  background: #EAB308;
+  border: none;
+  color: #FFFFFF;
+}
+
+/* outline (Удалить, Отмена) */
+.task-card .delete-btn,
+.task-card .cancel-btn {
+  background: #FFFFFF;
+  border: 2px solid #EAB308;
+  color: #EAB308;
+}
+
+/* hover эффект как в остальном проекте */
+.task-card .action-btn:hover {
+  filter: brightness(0.92);
+}
+
+.task-card .action-btn:active {
+  transform: translateY(1px);
+}

@@ -183,3 +183,10 @@
     row-gap: 40px;
   }
 }
+/* Отмена — как в задачах и документах, но ширина 158px */
+.profile-btn.cancel {
+  width: 158px;              /* ← твое требование */
+  background: #FFFFFF;
+  border: 2px solid #EAB308;
+  color: #EAB308;
+}
