@@ -36,6 +36,67 @@ const clientPath = path.join(__dirname, '..', 'client');
 /* =======================
    Статика
 ======================= */
+const adminPagePaths = [
+    '/admin-panel',
+    '/admin-panel.html',
+    '/admin_announcement',
+    '/admin_announcement.html',
+    '/admin_documents',
+    '/admin_documents.html',
+    '/admin_notify',
+    '/admin_notify.html',
+    '/admin_profiles',
+    '/admin_profiles.html'
+];
+
+async function checkAdminPageAccess(req, res, next) {
+    const token = req.cookies?.token;
+
+    if (!token) {
+        return res.redirect('/login');
+    }
+
+    const session = await Session.findOne({
+        where: {
+            token,
+            expiresAt: { [Op.gt]: new Date() }
+        },
+        include: User
+    });
+
+    if (!session) {
+        res.clearCookie('token');
+        return res.redirect('/login');
+    }
+
+    if (session.User.role !== 'admin') {
+        res.status(403);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.send(`<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Доступ запрещен</title>
+</head>
+<body>
+  <script>
+    alert('У вас недостаточно прав');
+    window.location.replace('/');
+  </script>
+</body>
+</html>`);
+    }
+
+    req.user = {
+        id: session.User.id,
+        username: session.User.username,
+        role: session.User.role
+    };
+
+    next();
+}
+
+app.use(adminPagePaths, checkAdminPageAccess);
 app.use(express.static(clientPath));
 
 /* =======================
