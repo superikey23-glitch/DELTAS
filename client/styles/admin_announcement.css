@@ -143,7 +143,10 @@
 }
 
 .aa-btn-secondary{
-  background: #9CA3AF;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 2px solid #EAB308;
+  color: #EAB308;
 }
 
 /* Статус */
