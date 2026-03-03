@@ -35,12 +35,18 @@ function setActive(groupSelector, attr, value) {
 }
 
 function getDocType(doc) {
-  const t = String(doc?.fileType || '').toUpperCase().trim();
-  if (t) return t;
+  let t = String(doc?.fileType || '').toUpperCase().trim();
 
-  const name = String(doc?.fileName || '');
-  const ext = name.includes('.') ? name.split('.').pop() : '';
-  return String(ext || '').toUpperCase().trim();
+  if (!t) {
+    const name = String(doc?.fileName || '');
+    const ext = name.includes('.') ? name.split('.').pop() : '';
+    t = String(ext || '').toUpperCase().trim();
+  }
+
+  // 🔥 НОРМАЛИЗАЦИЯ JPG → JPEG
+  if (t === 'JPG') t = 'JPEG';
+
+  return t;
 }
 
 function applyClientSortAndFilter(docs) {
