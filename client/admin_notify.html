@@ -85,6 +85,14 @@ const titleEl = document.getElementById('title');
 const bodyEl = document.getElementById('body');
 
 let users = [];
+const TITLE_PLACEHOLDER_FULL = 'Введите заголовок (до 45 символов)';
+const TITLE_PLACEHOLDER_SHORT = 'Заголовок (до 45 символов)';
+
+function updateTitlePlaceholder() {
+  titleEl.placeholder = window.innerWidth <= 480
+    ? TITLE_PLACEHOLDER_SHORT
+    : TITLE_PLACEHOLDER_FULL;
+}
 
 /* загрузка пользователей */
 async function loadUsers() {
@@ -115,10 +123,33 @@ async function loadUsers() {
 }
 
 function updateSelectWidth() {
-  const opt = userSelect.options[userSelect.selectedIndex];
-  const text = (opt ? opt.textContent : '') || '';
+  const wrap = document.querySelector('.an-select-wrap.an-to');
+  if (!wrap) return;
 
   const cs = getComputedStyle(userSelect);
+
+  const panel = wrap.closest('.an-panel');
+  const panelStyles = panel ? getComputedStyle(panel) : null;
+  const panelInnerWidth = panel
+    ? panel.clientWidth
+      - parseFloat(panelStyles?.paddingLeft || 0)
+      - parseFloat(panelStyles?.paddingRight || 0)
+    : 1038;
+
+  const baseMinW = window.innerWidth <= 1024 ? 293 : 317;
+  const maxW = window.innerWidth <= 1024
+    ? Math.floor(panelInnerWidth)
+    : 1038;
+  const minW = Math.min(baseMinW, maxW);
+
+  // Плейсхолдер ("Выберите пользователя") всегда возвращаем к базовой ширине.
+  if (!userSelect.value) {
+    wrap.style.setProperty('width', minW + 'px', 'important');
+    return;
+  }
+
+  const opt = userSelect.options[userSelect.selectedIndex];
+  const text = (opt ? opt.textContent : '') || '';
 
   const span = document.createElement('span');
   span.style.position = 'absolute';
@@ -134,18 +165,19 @@ function updateSelectWidth() {
   const textW = Math.ceil(span.getBoundingClientRect().width);
   document.body.removeChild(span);
 
-  const minW = 270;
-  const maxW = 1038;
+  const padLeft = parseFloat(cs.paddingLeft || 0) || 0;
+  const padRight = parseFloat(cs.paddingRight || 0) || 0;
+  const w = Math.ceil(textW + padLeft + padRight + 6);
 
-  // точно под наши padding: left 16 + right 44 (под стрелку) + небольшой запас
-  const w = textW + 16 + 40 ;
-
-  const wrap = document.querySelector('.an-select-wrap.an-to');
-  wrap.style.width = Math.max(minW, Math.min(maxW, w)) + 'px';
+  wrap.style.setProperty('width', Math.max(minW, Math.min(maxW, w)) + 'px', 'important');
 }
 
 
 userSelect.addEventListener('change', updateSelectWidth);
+window.addEventListener('resize', () => {
+  updateSelectWidth();
+  updateTitlePlaceholder();
+});
 
 /* отправка */
 form.onsubmit = async (e) => {
@@ -185,6 +217,7 @@ form.onsubmit = async (e) => {
 };
 
 loadUsers();
+updateTitlePlaceholder();
 </script>
 
 </body>

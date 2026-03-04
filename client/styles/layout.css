@@ -211,7 +211,8 @@
         margin-top: 40px;
     }
     
-    .footer-column {
+    .footer-column,
+    .footer-right {
         width: 100%;
         margin: 10px 0;
     }
@@ -245,7 +246,13 @@
     .header-buttons {
         width: 100%;
         justify-content: center;
+        flex-wrap: nowrap;
+        gap: 12px;
         margin-top: 10px;
+    }
+
+    .action-button {
+        min-width: 0;
     }
     
     .daily-phrase {
@@ -277,16 +284,36 @@
         grid-template-columns: 1fr;
         gap: 16px;
     }
+
+    .footer {
+        margin-top: 10px;
+        gap: 8px;
+    }
+
+    .footer-column,
+    .footer-right {
+        margin: 0;
+    }
+
+    .footer-center {
+        margin: 0;
+    }
     
     .footer-nav {
-        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
+    }
+
+    .footer-nav-button {
+        width: 100%;
     }
 }
 
 /* адаптивность для очень маленьких экранов */
 @media (max-width: 480px) {
     .footer-nav {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     
     .footer-nav-button {

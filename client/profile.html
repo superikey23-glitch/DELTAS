@@ -104,6 +104,32 @@
 </div>
 
 <script>
+function fitProfileInputText(input) {
+    if (!input) return;
+
+    const computed = window.getComputedStyle(input);
+    const baseFontSize = Number.parseFloat(input.dataset.baseFontSize || computed.fontSize);
+    const mobileBreakpoint = 768;
+    const minFontSize = 12;
+
+    input.dataset.baseFontSize = String(baseFontSize);
+    input.style.fontSize = `${baseFontSize}px`;
+
+    if (window.innerWidth > mobileBreakpoint) {
+        return;
+    }
+
+    let currentSize = baseFontSize;
+    while (currentSize > minFontSize && input.scrollWidth > input.clientWidth) {
+        currentSize -= 1;
+        input.style.fontSize = `${currentSize}px`;
+    }
+}
+
+function fitAllProfileInputs() {
+    document.querySelectorAll('.profile-form input').forEach(fitProfileInputText);
+}
+
 async function loadProfile() {
     const res = await fetch('/api/profile');
     if (!res.ok) {
@@ -125,7 +151,8 @@ document.getElementById('logoutBtn').onclick = async () => {
     location.href = '/login';
 };
 
-loadProfile();
+loadProfile().then(fitAllProfileInputs);
+window.addEventListener('resize', fitAllProfileInputs);
 </script>
 
 </body>

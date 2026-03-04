@@ -136,6 +136,10 @@
   color: #374151;
 }
 
+.an-msg:empty{
+  display: none;
+}
+
 .an-msg.ok{ color: #334230; }
 .an-msg.err{ color: #b91c1c; }
 
@@ -177,7 +181,8 @@
   border: none;
   background: transparent;
 
-  padding: 10px 16px; /* обычный отступ */
+  /* Оставляем место под стрелку (::after) справа */
+  padding: 10px 44px 10px 16px;
 
   font-family: 'Inter', sans-serif;
   font-weight: 500;
@@ -211,4 +216,387 @@
   left: 32px;
   top: 32px;
   width: 317px; /* старт */
+}
+@media (max-width: 1024px){
+  .main-content{
+    padding: 20px 16px;
+  }
+
+  .an-title{
+    width: 100%;
+    height: auto;
+    margin: 28px auto 28px;
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .an-panel{
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .an-form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .an-subject,
+  .an-textarea,
+  .an-btn,
+  .an-msg{
+    position: static;
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* Поле выбора пользователя не растягиваем на всю ширину формы. */
+  .an-select-wrap.an-to{
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 293px;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    align-self: flex-start;
+  }
+
+  .an-input,
+  .an-textarea,
+  .an-select{
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .an-subject,
+  .an-select-wrap{
+    height: 46px;
+  }
+
+  .an-textarea{
+    height: 120px;
+    min-height: 120px;
+  }
+
+  .an-btn{
+    height: 42px;
+    width: 160px !important;
+  }
+
+  .an-msg{
+    min-height: 18px;
+  }
+
+  /* width/position для выбора пользователя задаются в .an-select-wrap.an-to + JS (автоширина). */
+}
+
+@media (max-width: 1199px){
+  .footer-column,
+  .footer-right{
+    height: auto;
+    min-height: 0;
+    padding: 12px 18px;
+  }
+
+  .footer-left,
+  .footer-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-center{
+    margin: 10px 0;
+  }
+
+  .footer-nav{
+    height: auto;
+    align-items: center;
+  }
+
+  .footer-right{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-title{
+    margin-bottom: 4px;
+  }
+}
+
+@media (max-width: 768px){
+  .header{
+    height: auto;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .logo-button{
+    width: 160px;
+    height: 44px;
+  }
+
+  .nav-link{
+    order: 3;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .header-buttons{
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .action-button{
+    min-width: 160px;
+    padding: 0 18px;
+  }
+
+  .main-content{
+    padding: 18px 12px;
+  }
+
+  .an-title{
+    margin: 20px auto 20px;
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .an-panel{
+    padding: 16px 14px;
+    border-radius: 10px;
+  }
+
+  .an-form{
+    gap: 12px;
+  }
+
+  .an-input,
+  .an-textarea,
+  .an-select{
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .an-subject,
+  .an-select-wrap{
+    height: 44px;
+  }
+
+  .an-textarea{
+    height: 108px;
+    min-height: 108px;
+    padding-top: 12px;
+  }
+
+  .an-btn{
+    width: 100% !important;
+    height: 40px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .an-msg{
+    font-size: 13px;
+    line-height: 17px;
+  }
+
+  .an-to,
+  .an-select-wrap{
+    width: 293px;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .an-select-wrap{
+    position: relative;
+  }
+
+  .footer{
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .footer-column,
+  .footer-right{
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  .footer-column{
+    padding: 18px 20px;
+  }
+
+  .footer-center{
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px){
+  body{
+    padding: 0;
+  }
+
+  .site-container{
+    margin: 0;
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  .header{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .logo-button{
+    width: 100%;
+  }
+
+  .nav-link{
+    order: 0;
+  }
+
+  .header-buttons{
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .action-button{
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .main-content{
+    padding: 16px 12px;
+  }
+
+  .an-title{
+    margin: 16px auto 16px;
+    font-size: 21px;
+    line-height: 26px;
+  }
+
+  .an-panel{
+    padding: 14px 12px 14px;
+  }
+
+  .an-form{
+    gap: 10px;
+  }
+
+  .an-input,
+  .an-textarea,
+  .an-select{
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .an-to,
+  .an-select-wrap{
+    width: min(293px, 100%);
+    min-width: 0;
+  }
+
+  .an-select-wrap{
+    position: relative;
+  }
+
+  .an-to,
+  .an-select-wrap{
+    width: min(317px, 100%) !important;
+    min-width: 0;
+  }
+
+  .an-subject,
+  .an-select-wrap{
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .an-textarea{
+    height: 96px;
+    min-height: 96px;
+    border-radius: 8px;
+  }
+
+  .an-btn{
+    height: 38px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .footer{
+    padding: 12px;
+  }
+
+  .footer-column,
+  .footer-right{
+    padding: 16px 14px;
+    border-radius: 9px;
+  }
+
+  .privacy-link,
+  .footer-text{
+    width: 100%;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 901px){
+  .footer-nav{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .footer-nav-button{
+    width: 126px;
+    min-width: 0;
+    padding: 0 14px;
+    flex: 0 0 126px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 481px){
+  .footer-nav{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    gap: 12px;
+  }
+
+  .footer-nav-button{
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px){
+  .footer-nav{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 10px;
+  }
+
+  .footer-nav-button{
+    width: 100%;
+  }
 }
