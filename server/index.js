@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const os = require('os');
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
 const multer = require('multer');
@@ -9,7 +10,23 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+
+function getLanUrls(port) {
+    const interfaces = os.networkInterfaces();
+    const urls = [];
+
+    for (const list of Object.values(interfaces)) {
+        if (!Array.isArray(list)) continue;
+        for (const item of list) {
+            if (!item || item.family !== 'IPv4' || item.internal) continue;
+            urls.push(`http://${item.address}:${port}`);
+        }
+    }
+
+    return urls;
+}
 
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -1138,14 +1155,29 @@ app.get("/api/users", requireAuth, requireRole("admin"), async (req, res) => {
 // Создание пользователя
 app.post("/api/users", requireAuth, requireRole("admin"), async (req, res) => {
   try {
-    const { fullname, email, phone, position, role, username, password } = req.body;
+    const fullname = String(req.body?.fullname ?? "").trim();
+    const email = String(req.body?.email ?? "").trim();
+    const phone = String(req.body?.phone ?? "").trim();
+    const position = String(req.body?.position ?? "").trim();
+    const role = String(req.body?.role ?? "").trim();
+    const username = String(req.body?.username ?? "").trim();
+    const password = String(req.body?.password ?? "");
 
     if (!fullname || !email || !phone || !position || !role || !username || !password) {
       return res.status(400).json({ error: "Заполни все поля" });
     }
 
-    const exists = await User.findOne({ where: { username } });
-    if (exists) return res.status(400).json({ error: "Логин уже занят" });
+    const conflict = await User.findOne({
+      where: { [Op.or]: [{ username }, { email }, { phone }] },
+      attributes: ["id", "username", "email", "phone"],
+    });
+
+    if (conflict) {
+      if (conflict.username === username) return res.status(400).json({ error: "Логин уже занят" });
+      if (conflict.email === email) return res.status(400).json({ error: "Email уже занят" });
+      if (conflict.phone === phone) return res.status(400).json({ error: "Телефон уже занят" });
+      return res.status(400).json({ error: "Пользователь с такими данными уже существует" });
+    }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -1169,6 +1201,14 @@ app.post("/api/users", requireAuth, requireRole("admin"), async (req, res) => {
       username: user.username,
     });
   } catch (err) {
+    if (err?.name === "SequelizeUniqueConstraintError") {
+      const paths = Array.isArray(err.errors) ? err.errors.map((e) => e.path).filter(Boolean) : [];
+      const set = new Set(paths);
+      if (set.has("username")) return res.status(400).json({ error: "Логин уже занят" });
+      if (set.has("email")) return res.status(400).json({ error: "Email уже занят" });
+      if (set.has("phone")) return res.status(400).json({ error: "Телефон уже занят" });
+      return res.status(400).json({ error: "Поля должны быть уникальными" });
+    }
     console.error("Ошибка создания пользователя:", err);
     res.status(500).json({ error: "Ошибка создания пользователя" });
   }
@@ -1184,15 +1224,58 @@ app.put("/api/users/:id", requireAuth, requireRole("admin"), async (req, res) =>
 
     const { fullname, email, phone, position, role, username, password } = req.body;
 
-    if (fullname !== undefined) user.fullname = fullname;
-    if (email !== undefined) user.email = email;
-    if (phone !== undefined) user.phone = phone;
-    if (position !== undefined) user.position = position;
-    if (role !== undefined) user.role = role;
-    if (username !== undefined) user.username = username;
+    const nextFullname = fullname !== undefined ? String(fullname).trim() : undefined;
+    const nextEmail = email !== undefined ? String(email).trim() : undefined;
+    const nextPhone = phone !== undefined ? String(phone).trim() : undefined;
+    const nextPosition = position !== undefined ? String(position).trim() : undefined;
+    const nextRole = role !== undefined ? String(role).trim() : undefined;
+    const nextUsername = username !== undefined ? String(username).trim() : undefined;
 
-    if (password) {
-      const hashedPassword = bcrypt.hashSync(password, 10);
+    if (nextFullname !== undefined && !nextFullname) return res.status(400).json({ error: "ФИО обязательно" });
+    if (nextEmail !== undefined && !nextEmail) return res.status(400).json({ error: "Email обязателен" });
+    if (nextPhone !== undefined && !nextPhone) return res.status(400).json({ error: "Телефон обязателен" });
+    if (nextPosition !== undefined && !nextPosition) return res.status(400).json({ error: "Должность обязательна" });
+    if (nextRole !== undefined && !nextRole) return res.status(400).json({ error: "Роль обязательна" });
+    if (nextUsername !== undefined && !nextUsername) return res.status(400).json({ error: "Логин обязателен" });
+
+    if (nextUsername !== undefined || nextEmail !== undefined || nextPhone !== undefined) {
+      const conflict = await User.findOne({
+        where: {
+          id: { [Op.ne]: id },
+          [Op.or]: [
+            ...(nextUsername !== undefined ? [{ username: nextUsername }] : []),
+            ...(nextEmail !== undefined ? [{ email: nextEmail }] : []),
+            ...(nextPhone !== undefined ? [{ phone: nextPhone }] : []),
+          ],
+        },
+        attributes: ["id", "username", "email", "phone"],
+      });
+
+      if (conflict) {
+        if (nextUsername !== undefined && conflict.username === nextUsername) {
+          return res.status(400).json({ error: "Логин уже занят" });
+        }
+        if (nextEmail !== undefined && conflict.email === nextEmail) {
+          return res.status(400).json({ error: "Email уже занят" });
+        }
+        if (nextPhone !== undefined && conflict.phone === nextPhone) {
+          return res.status(400).json({ error: "Телефон уже занят" });
+        }
+        return res.status(400).json({ error: "Пользователь с такими данными уже существует" });
+      }
+    }
+
+    if (nextFullname !== undefined) user.fullname = nextFullname;
+    if (nextEmail !== undefined) user.email = nextEmail;
+    if (nextPhone !== undefined) user.phone = nextPhone;
+    if (nextPosition !== undefined) user.position = nextPosition;
+    if (nextRole !== undefined) user.role = nextRole;
+    if (nextUsername !== undefined) user.username = nextUsername;
+
+    if (password !== undefined) {
+      const nextPassword = String(password);
+      if (!nextPassword) return res.status(400).json({ error: "Пароль не может быть пустым" });
+      const hashedPassword = bcrypt.hashSync(nextPassword, 10);
       user.password = hashedPassword;
     }
 
@@ -1208,6 +1291,14 @@ app.put("/api/users/:id", requireAuth, requireRole("admin"), async (req, res) =>
       username: user.username,
     });
   } catch (err) {
+    if (err?.name === "SequelizeUniqueConstraintError") {
+      const paths = Array.isArray(err.errors) ? err.errors.map((e) => e.path).filter(Boolean) : [];
+      const set = new Set(paths);
+      if (set.has("username")) return res.status(400).json({ error: "Логин уже занят" });
+      if (set.has("email")) return res.status(400).json({ error: "Email уже занят" });
+      if (set.has("phone")) return res.status(400).json({ error: "Телефон уже занят" });
+      return res.status(400).json({ error: "Поля должны быть уникальными" });
+    }
     console.error("Ошибка обновления пользователя:", err);
     res.status(500).json({ error: "Ошибка обновления пользователя" });
   }
@@ -1254,8 +1345,16 @@ sequelize.sync({ force: false })
         await createDefaultUsers();
         
         // Запускаем сервер
-        app.listen(PORT, () => {
+        app.listen(PORT, HOST, () => {
             console.log(`Сервер готов http://localhost:${PORT}`);
+
+            const lanUrls = getLanUrls(PORT);
+            if (lanUrls.length > 0) {
+                console.log('Подключение с телефона (одна Wi-Fi сеть):');
+                lanUrls.forEach((url) => console.log(`- ${url}`));
+            } else {
+                console.log('LAN адрес не найден. Проверь подключение к сети.');
+            }
         });
     })
     .catch(err => {
