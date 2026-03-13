@@ -315,108 +315,108 @@ function requireRole(role) {
 /* =======================
    DB init
 ======================= */
-async function initDb() {
-  await query(`
-    CREATE TABLE IF NOT EXISTS users (
-      id BIGSERIAL PRIMARY KEY,
-      fullname TEXT NOT NULL,
-      phone TEXT NOT NULL UNIQUE,
-      email TEXT NOT NULL UNIQUE,
-      position TEXT NOT NULL,
-      username TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL,
-      role TEXT NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+// async function initDb() {
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS users (
+//       id BIGSERIAL PRIMARY KEY,
+//       fullname TEXT NOT NULL,
+//       phone TEXT NOT NULL UNIQUE,
+//       email TEXT NOT NULL UNIQUE,
+//       position TEXT NOT NULL,
+//       username TEXT NOT NULL UNIQUE,
+//       password TEXT NOT NULL,
+//       role TEXT NOT NULL,
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS tasks (
-      id BIGSERIAL PRIMARY KEY,
-      title TEXT NOT NULL,
-      description TEXT NULL,
-      priority TEXT NOT NULL DEFAULT 'Средний',
-      deadline TIMESTAMPTZ NULL,
-      user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS tasks (
+//       id BIGSERIAL PRIMARY KEY,
+//       title TEXT NOT NULL,
+//       description TEXT NULL,
+//       priority TEXT NOT NULL DEFAULT 'Средний',
+//       deadline TIMESTAMPTZ NULL,
+//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS documents (
-      id BIGSERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      file_name TEXT NOT NULL,
-      file_type TEXT NOT NULL,
-      upload_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      file_path TEXT NOT NULL,
-      user_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS documents (
+//       id BIGSERIAL PRIMARY KEY,
+//       name TEXT NOT NULL,
+//       file_name TEXT NOT NULL,
+//       file_type TEXT NOT NULL,
+//       upload_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       file_path TEXT NOT NULL,
+//       user_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL,
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS sessions (
-      id BIGSERIAL PRIMARY KEY,
-      token TEXT NOT NULL UNIQUE,
-      expires_at TIMESTAMPTZ NOT NULL,
-      user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS sessions (
+//       id BIGSERIAL PRIMARY KEY,
+//       token TEXT NOT NULL UNIQUE,
+//       expires_at TIMESTAMPTZ NOT NULL,
+//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS notifications (
-      id BIGSERIAL PRIMARY KEY,
-      title TEXT NOT NULL,
-      body TEXT NOT NULL,
-      is_read BOOLEAN NOT NULL DEFAULT FALSE,
-      user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS notifications (
+//       id BIGSERIAL PRIMARY KEY,
+//       title TEXT NOT NULL,
+//       body TEXT NOT NULL,
+//       is_read BOOLEAN NOT NULL DEFAULT FALSE,
+//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
 
-  await query(`
-    CREATE TABLE IF NOT EXISTS announcements (
-      id BIGINT PRIMARY KEY,
-      text TEXT NOT NULL DEFAULT '',
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
-}
+//   await query(`
+//     CREATE TABLE IF NOT EXISTS announcements (
+//       id BIGINT PRIMARY KEY,
+//       text TEXT NOT NULL DEFAULT '',
+//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+//     );
+//   `);
+// }
 
 /* =======================
    Функция создания пользователей по умолчанию
 ======================= */
-async function createDefaultUsers() {
-  const user = await getUserByUsername('123');
-  if (user) return;
+// async function createDefaultUsers() {
+//   const user = await getUserByUsername('123');
+//   if (user) return;
 
-  await query(
-    `
-    INSERT INTO users (
-      fullname, phone, email, position, role, username, password, created_at, updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-    `,
-    [
-      'Ботвиновский Игорь Николаевич',
-      '+79873414633',
-      'Igorbot2007@mail.ru',
-      'Веб-разработчик (стажёр)',
-      'admin',
-      '123',
-      bcrypt.hashSync('123', 10)
-    ]
-  );
+//   await query(
+//     `
+//     INSERT INTO users (
+//       fullname, phone, email, position, role, username, password, created_at, updated_at
+//     ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+//     `,
+//     [
+//       'Ботвиновский Игорь Николаевич',
+//       '+79873414633',
+//       'Igorbot2007@mail.ru',
+//       'Веб-разработчик (стажёр)',
+//       'admin',
+//       '123',
+//       bcrypt.hashSync('123', 10)
+//     ]
+//   );
 
-  console.log('✅ Создан основной пользователь');
-}
+//   console.log('✅ Создан основной пользователь');
+// }
 
 /* =======================
    Загрузка файлов
@@ -1414,10 +1414,8 @@ app.use((req, res) => {
 ======================= */
 async function start() {
   try {
-    await initDb();
-    console.log('✅ PostgreSQL структура готова');
-
-    await createDefaultUsers();
+    await pool.query('SELECT 1');
+    console.log('✅ PostgreSQL подключен');
 
     app.listen(PORT, HOST, () => {
       console.log(`Сервер готов http://localhost:${PORT}`);
