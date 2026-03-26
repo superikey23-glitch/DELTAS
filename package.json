@@ -9,7 +9,7 @@
     "multer": "^2.0.2",
     "pg": "^8.20.0"
   },
-  "name": "delta",
+  "name": "lts",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000d\u0000e\u0000l\u0000t\u0000a\u0000\r\u0000 \u0000#\u0000 \u0000d\u0000e\u0000l\u0000t\u0000a\u0000\r\u0000 \u0000",
   "main": "index.js",

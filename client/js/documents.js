@@ -36,28 +36,20 @@ function setActive(groupSelector, attr, value) {
 
 function getDocType(doc) {
   let t = String(doc?.fileType || '').toUpperCase().trim();
-
   if (!t) {
     const name = String(doc?.fileName || '');
     const ext = name.includes('.') ? name.split('.').pop() : '';
     t = String(ext || '').toUpperCase().trim();
   }
-
-  // 🔥 НОРМАЛИЗАЦИЯ JPG → JPEG
   if (t === 'JPG') t = 'JPEG';
-
   return t;
 }
 
 function applyClientSortAndFilter(docs) {
   let out = Array.isArray(docs) ? [...docs] : [];
-
-  // filter
   if (state.filterType !== 'all') {
     out = out.filter(d => getDocType(d) === state.filterType);
   }
-
-  // sort
   if (state.sortBy === 'name') {
     out.sort((a, b) =>
       String(a?.name || '').localeCompare(String(b?.name || ''), 'ru')
@@ -65,7 +57,6 @@ function applyClientSortAndFilter(docs) {
   } else if (state.sortBy === 'old') {
     out.sort((a, b) => new Date(a?.uploadDate || 0) - new Date(b?.uploadDate || 0));
   } else {
-    // new (default)
     out.sort((a, b) => new Date(b?.uploadDate || 0) - new Date(a?.uploadDate || 0));
   }
 

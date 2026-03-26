@@ -21,15 +21,10 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 18px;
+    line-height: 20px;
     color: #FFFFFF;
     text-decoration: none;
-    transition: background-color 0.2s;
-}
-
-.logo-button:hover {
-    background: #d4a107;
 }
 
 /* навигация в шапке */
