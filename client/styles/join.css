@@ -1,4 +1,4 @@
-/* ===== LOGIN PAGE ===== */
+
 
 .login-shell{
   width: 100%;
@@ -8,7 +8,7 @@
   padding: 80px 16px 80px;
 }
 
-/* Заголовок "Вход" */
+
 .login-title{
   font-family: 'Inter', sans-serif;
   font-weight: 700;
@@ -19,7 +19,7 @@
   margin-bottom: 24px;
 }
 
-/* Форма */
+
 .login-form{
   width: 100%;
   max-width: 538px;
@@ -29,7 +29,7 @@
   gap: 22px;
 }
 
-/* Жёлтая карточка */
+
 .login-card{
   width: 100%;
   max-width: 538px;
@@ -46,14 +46,14 @@
   gap: 19px;
 }
 
-/* Скрываем текст label */
+
 .login-field{
   font-size: 0;
   line-height: 0;
   color: transparent;
 }
 
-/* Инпуты */
+
 .login-field input{
   width: 100%;
   max-width: 460px;
@@ -83,7 +83,7 @@
   opacity: 1;
 }
 
-/* Кнопка */
+
 .login-btn{
   width: 214px;
   height: 65px;
@@ -115,7 +115,7 @@
   color: red;
 }
 
-/* ===== ADAPTIVE ===== */
+
 
 @media (max-width: 1024px){
   .login-shell{
@@ -195,7 +195,7 @@
   }
 }
 
-/* Только для страницы входа */
+
 body:has(.login-shell) .site-container{
     min-height: auto;
 }

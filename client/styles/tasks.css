@@ -1,4 +1,4 @@
-/*tasks */
+
 
 .page-title-section {
     margin-bottom: 24px;
@@ -13,18 +13,14 @@
     color: #374151;
 }
 
-/* =========================
-   SORTING PANEL
-========================= */
 
-/* =========================
-   TASKS — SORTING (как documents)
-========================= */
+
+
 
 .sorting-panel {
     margin-left: -24px;
     margin-right: -24px;
-    margin-bottom: 50px; /* ⬅ отступ от задач */
+    margin-bottom: 50px; 
 }
 
 .sort-buttons {
@@ -44,8 +40,8 @@
 }
 
 .sort-btn {
-    width: 126px;   /* ⬅ новое */
-    height: 41px;   /* ⬅ новое */
+    width: 126px;   
+    height: 41px;   
 
     background: #FFFFFF;
     border: 2px solid #EAB308;
@@ -71,9 +67,7 @@
     color: #FFFFFF;
 }
 
-/* =========================
-   TASKS GRID
-========================= */
+
 
 .tasks-container {
     display: grid;
@@ -83,9 +77,7 @@
     margin: 0 auto 60px;
 }
 
-/* =========================
-   TASK CARD — BASE
-========================= */
+
 
 .task-card {
     background: #FEF9C3;
@@ -95,10 +87,7 @@
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
-/* .task-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
-} */
+
 
 .card-inner {
     padding: 20px;
@@ -112,9 +101,7 @@
 
 }
 
-/* =========================
-   NEW TASK CARD
-========================= */
+
 
 .new-task-card {
     background: #FEF9C3;
@@ -167,9 +154,7 @@
     text-align: center;
 }
 
-/* =========================
-   TASK FIELDS — SAVED MODE
-========================= */
+
 
 .field-container {
     margin-bottom: 14px;
@@ -184,26 +169,24 @@
     color: #374151;
 }
 
-/* Заголовок */
+
 .task-field.title {
     font-weight: 600;
 }
 
-/* Описание */
+
 .task-field.description {
     min-height: 72px;
     color: #4B5563;
 }
 
-/* Приоритет / дата */
+
 .task-field.meta {
     font-size: 14px;
     color: #6B7280;
 }
 
-/* =========================
-   TASK INPUTS — EDIT MODE
-========================= */
+
 
 .task-input {
     width: 100%;
@@ -225,9 +208,7 @@
     color: #9CA3AF;
 }
 
-/* =========================
-   CARD ACTIONS
-========================= */
+
 
 .card-actions {
     margin-top: auto;
@@ -247,7 +228,7 @@
     transition: background 0.2s, color 0.2s;
 }
 
-/* Редактировать */
+
 .edit-btn {
     background: #EAB308;
     color: #FFFFFF;
@@ -257,7 +238,7 @@
     background: #D4A107;
 }
 
-/* Удалить (как в макете) */
+
 .delete-btn {
     background: #FFFFFF;
     color: #EAB308;
@@ -268,7 +249,7 @@
     background: #FEF08A;
 }
 
-/* Сохранить */
+
 .save-btn {
     background: #22C55E;
     color: #FFFFFF;
@@ -278,7 +259,7 @@
     background: #16A34A;
 }
 
-/* Отмена */
+
 .cancel-btn {
     background: #FFFFFF;
     color: #6B7280;
@@ -289,9 +270,7 @@
     background: #F3F4F6;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+
 
 @media (max-width: 1024px) {
     .main-content {
@@ -635,10 +614,10 @@
     }
 }
 
-/* урвсный цвет у задач */
-/* дедлайн завтра */
+
+
 .task-card.deadline-soon .card-inner {
-    border: 2px solid #dc2626; /* алый */
+    border: 2px solid #dc2626; 
     background: rgba(220, 38, 38, 0.05);
 }
 
@@ -647,26 +626,23 @@
     font-weight: 600;
 }
 
-/* просроченные задачи */
-/* Просроченные задачи */
+
+
 .task-card.deadline-overdue {
     background: #FEE2E2;
     border: 2px solid #DC2626;
 }
 
-/* Заголовок просроченной задачи */
+
 .task-card.deadline-overdue .task-field.title,
 .task-card.deadline-overdue .task-field[data-field="title"] {
     color: #B91C1C !important;
     font-weight: 700;
 }
 
-/* =========================
-   TASKS BUTTON COLORS — unified with project
-   (меняем только цвет, размер остаётся прежний)
-========================= */
 
-/* primary (Редактировать, Сохранить) */
+
+
 .task-card .edit-btn,
 .task-card .save-btn {
   background: #EAB308;
@@ -674,7 +650,7 @@
   color: #FFFFFF;
 }
 
-/* outline (Удалить, Отмена) */
+
 .task-card .delete-btn,
 .task-card .cancel-btn {
   background: #FFFFFF;
@@ -682,7 +658,7 @@
   color: #EAB308;
 }
 
-/* hover эффект как в остальном проекте */
+
 .task-card .action-btn:hover {
   filter: brightness(0.92);
 }

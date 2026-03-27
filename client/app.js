@@ -1,4 +1,3 @@
-// список фраз для ежедневного сообщения
 const dailyMessages = [
     "Сегодня отличный день, чтобы заработать миллион долларов.",
     "Сегодня отличный день, чтобы стать волшебником.",
@@ -31,34 +30,23 @@ const dailyMessages = [
     "Сегодня отличный день, чтобы закончить начатое.",
     "Сегодня отличный день, чтобы начать что-то новое."
 ];
-
-// урл api для задач
 const API_URL = 'http://localhost:3000/api/tasks';
 let currentSort = 'new';
-
-// получение случайной фразы на основе даты
 function getRandomMessage() {
     const today = new Date();
     const dayOfMonth = today.getDate();
     const index = dayOfMonth % dailyMessages.length;
     return dailyMessages[index];
 }
-
-// основная функция для загрузки данных
 function loadData() {
-    // установка ежедневного сообщения
     const dailyMessageElement = document.getElementById('daily-message');
     if (dailyMessageElement) {
         dailyMessageElement.textContent = getRandomMessage();
     }
-    
-    // загрузка объявления от админа (заглушка)
     const announcementElement = document.getElementById('admin-announcement');
     if (announcementElement) {
         console.log('загрузка объявления...');
     }
-    
-    // настройка кнопок скачивания
     const downloadButtons = document.querySelectorAll('.download-button');
     downloadButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -66,8 +54,6 @@ function loadData() {
             downloadFile(fileName);
         });
     });
-    
-    // настройка ссылок в подвале
     const footerLinks = document.querySelectorAll('.footer-nav-button, .privacy-link');
     footerLinks.forEach(link => {
         if (link.href.includes('#')) {
@@ -77,12 +63,9 @@ function loadData() {
             });
         }
     });
-    
-    // настройка кнопок в шапке
     const headerButtons = document.querySelectorAll('.action-button');
     headerButtons.forEach(button => {
         if (button.href.includes('notifications.html') || button.href.includes('profile.html')) {
-            // реальные ссылки не трогаем
         } else if (button.href.includes('#')) {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -90,15 +73,10 @@ function loadData() {
             });
         }
     });
-    
-    // загрузка задач для главной страницы
     loadTasksPreview();
 }
-
-// загрузка задач для главной страницы с сортировкой по дедлайну и приоритету
 async function loadTasksPreview() {
     try {
-        // получение всех задач
         const response = await fetch(API_URL, {
             credentials: 'include'
         });
@@ -106,14 +84,11 @@ async function loadTasksPreview() {
         const tasksPreview = document.getElementById('tasksPreview');
         
         if (tasksPreview) {
-            // сортировка задач: сначала по близости дедлайна, потом по приоритету
             const sortedTasks = tasks.sort((a, b) => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
-                
-                // расчет дней до дедлайна
                 const getDaysDiff = (deadline) => {
-                    if (!deadline) return Infinity; // задачи без дедлайна в конец
+                    if (!deadline) return Infinity;
                     const deadlineDate = new Date(deadline);
                     deadlineDate.setHours(0, 0, 0, 0);
                     return Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
@@ -121,25 +96,17 @@ async function loadTasksPreview() {
                 
                 const daysDiffA = getDaysDiff(a.deadline);
                 const daysDiffB = getDaysDiff(b.deadline);
-                
-                // сначала сортируем по дням до дедлайна
                 if (daysDiffA < daysDiffB) return -1;
                 if (daysDiffA > daysDiffB) return 1;
-                
-                // при одинаковом дедлайне сортируем по приоритету
                 const priorityOrder = { 'Высокий': 1, 'Средний': 2, 'Низкий': 3 };
                 return priorityOrder[a.priority] - priorityOrder[b.priority];
             });
-            
-            // взятие первых 3 задач
             const topTasks = sortedTasks.slice(0, 3);
             
             if (topTasks.length === 0) {
                 tasksPreview.innerHTML = '<p class="errmargin">задачи отсутствуют</p>';
                 return;
             }
-            
-            // формирование html с информацией о днях до дедлайна
             tasksPreview.innerHTML = `
                 <div class="tasks-container">
                     ${topTasks.map(task => {
@@ -177,8 +144,6 @@ async function loadTasksPreview() {
         }
     }
 }
-
-// функции для страницы tasks.html
 async function loadTasks() {
     try {
         const response = await fetch(`${API_URL}?sortBy=${currentSort}`, {
@@ -215,34 +180,25 @@ function markDeadline(card, deadline) {
         card.classList.add('deadline-overdue');
     }
 }
-
-// отрисовка всех задач в сетке
 function renderTasks(tasks) {
     const tasksGrid = document.getElementById('tasksGrid');
     if (!tasksGrid) return;
 
     tasksGrid.innerHTML = '';
-
-    // добавление карточки для новой задачи
     const newTaskCard = createTaskCard({}, true);
     tasksGrid.appendChild(newTaskCard);
-
-    // создание карточек для всех задач
     tasks.forEach(task => {
         const taskCard = createTaskCard(task, false);
         tasksGrid.appendChild(taskCard);
     });
 
 }
-
-// создание карточки задачи (новая или существующая)
 function createTaskCard(task, isNew = false) {
     const card = document.createElement('div');
     card.className = 'task-card';
     card.dataset.id = task.id || 'new';
 
     if (isNew) {
-        // карточка для добавления новой задачи
         card.classList.add('new-task-card');
         card.innerHTML = `
             <div class="card-inner new-card-inner">
@@ -254,7 +210,6 @@ function createTaskCard(task, isNew = false) {
             </div>
         `;
     } else {
-        // карточка существующей задачи
         const deadlineText = task.deadline 
             ? `до ${new Date(task.deadline).toLocaleDateString('ru-RU')}`
             : 'дедлайн отсутствует';
@@ -300,8 +255,6 @@ function createTaskCard(task, isNew = false) {
 
     return card;
 }
-
-// настройка обработчиков событий для задач
 function setupTaskEvents() {
     const tasksGrid = document.getElementById('tasksGrid');
     const sortButtons = document.querySelectorAll('.sort-btn');
@@ -321,40 +274,28 @@ function setupTaskEvents() {
         });
     }
 }
-
-// обработка кликов по карточкам задач
 function handleTaskCardClick(event) {
     const card = event.target.closest('.task-card');
     if (!card) return;
 
     const taskId = card.dataset.id;
-
-    // обработка создания новой задачи
     if (card.classList.contains('new-task-card')) {
         createNewTask(card);
         return;
     }
-
-    // обработка кнопки редактирования
     if (event.target.classList.contains('edit-btn')) {
         enableEditMode(card);
         return;
     }
-
-    // обработка кнопки сохранения
     if (event.target.classList.contains('save-btn')) {
         saveTask(taskId, card);
         return;
     }
-
-    // обработка кнопки отмены
     if (event.target.classList.contains('cancel-btn')) {
         disableEditMode(card);
         loadTasks();
         return;
     }
-
-    // обработка кнопки удаления
     if (event.target.classList.contains('delete-btn')) {
         deleteTask(taskId);
         return;
@@ -364,24 +305,15 @@ function handleTaskCardClick(event) {
 function closeNewTaskCardIfOpen() {
   const tasksGrid = document.getElementById('tasksGrid');
   if (!tasksGrid) return;
-
-  // Открытая "карточка создания" — это task-card с data-id="new", но НЕ .new-task-card (плитка)
   const openNewCard = tasksGrid.querySelector('.task-card[data-id="new"]:not(.new-task-card)');
   if (!openNewCard) return;
-
-  // Возвращаем плитку "Добавить новую задачу"
   const newTaskTile = createTaskCard({}, true);
   openNewCard.replaceWith(newTaskTile);
 }
-
-
-// включение режима редактирования
 function enableEditMode(card) {
-  closeNewTaskCardIfOpen(); // ✅ закрываем создание, если оно открыто
+  closeNewTaskCardIfOpen();
 
   const tasksGrid = document.getElementById('tasksGrid');
-
-  // дальше твой код без изменений...
   if (tasksGrid) {
     tasksGrid.querySelectorAll('.task-card').forEach(c => {
       if (c !== card && c.querySelector('.edit-mode')?.style.display === 'block') {
@@ -398,7 +330,6 @@ function enableEditMode(card) {
   card.querySelector('.save-btn').style.display = 'block';
   card.querySelector('.cancel-btn').style.display = 'block';
 }
-// выключение режима редактирования
 function disableEditMode(card) {
     card.querySelector('.card-inner').style.backgroundColor = '';
     card.querySelectorAll('.view-mode').forEach(el => el.style.display = 'block');
@@ -408,8 +339,6 @@ function disableEditMode(card) {
     card.querySelector('.save-btn').style.display = 'none';
     card.querySelector('.cancel-btn').style.display = 'none';
 }
-
-// создание новой задачи
 function createNewTask(newCardElement) {
     const tempTask = { title: '', description: '', priority: 'Средний', deadline: '' };
     const editCard = createTaskCard(tempTask, false);
@@ -417,15 +346,11 @@ function createNewTask(newCardElement) {
     enableEditMode(editCard);
     newCardElement.replaceWith(editCard);
 }
-
-// сохранение задачи (новая или существующая)
 async function saveTask(taskId, card) {
     const title = card.querySelector('input[data-field="title"]')?.value.trim();
     const description = card.querySelector('textarea[data-field="description"]')?.value.trim();
     const priority = card.querySelector('select[data-field="priority"]')?.value;
     const deadline = card.querySelector('input[data-field="deadline"]')?.value || null;
-
-    // проверка обязательных полей
     if (!title) {
         alert('название задачи обязательно!');
         return;
@@ -445,7 +370,6 @@ async function saveTask(taskId, card) {
     try {
         let response;
         if (taskId === 'new') {
-            // создание новой задачи
             response = await fetch(API_URL, {
                 credentials: 'include',
                 method: 'POST',
@@ -453,7 +377,6 @@ async function saveTask(taskId, card) {
                 body: JSON.stringify(taskData)
             });
         } else {
-            // обновление существующей задачи
             response = await fetch(`${API_URL}/${taskId}`, {
                 method: 'PUT',
                 credentials: 'include',
@@ -473,8 +396,6 @@ async function saveTask(taskId, card) {
         alert('неудачное сохранение задачи');
     }
 }
-
-// удаление задачи
 async function deleteTask(taskId) {
     if (!confirm('удаление задачи?')) {
         return;
@@ -496,8 +417,6 @@ async function deleteTask(taskId) {
         alert('неудачное удаление задачи');
     }
 }
-
-// имитация скачивания файла (демо)
 function downloadFile(fileName) {
     const link = document.createElement('a');
     link.href = '#';
@@ -508,8 +427,6 @@ function downloadFile(fileName) {
     
     alert(`начало скачивания файла: ${fileName}\n(в демо-версии файл не загружается)`);
 }
-
-// проверка адаптивности
 function checkResponsive() {
     const width = window.innerWidth;
     const footer = document.querySelector('.footer');
@@ -518,15 +435,11 @@ function checkResponsive() {
         footer.style.position = 'relative';
     }
 }
-
-// инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('загрузка страницы. инициализация...');
     
     loadData();
     setupTaskEvents();
-    
-    // проверка, находимся ли на странице задач
     if (window.location.pathname.includes('tasks.html') || window.location.pathname === '/tasks') {
         loadTasks();
     }

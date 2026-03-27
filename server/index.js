@@ -1,4 +1,3 @@
-// index.js
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 const express = require('express');
@@ -40,9 +39,6 @@ function getLanUrls(port) {
 
 app.use(cookieParser());
 
-/* =======================
-   Middleware
-======================= */
 app.use(cors({
   credentials: true
 }));
@@ -53,14 +49,8 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-/* =======================
-   Пути
-======================= */
 const clientPath = path.join(__dirname, '..', 'client');
 
-/* =======================
-   Статика
-======================= */
 const adminPagePaths = [
   '/admin-panel',
   '/admin-panel.html',
@@ -74,9 +64,6 @@ const adminPagePaths = [
   '/admin_profiles.html'
 ];
 
-/* =======================
-   DB helpers
-======================= */
 function mapUser(row) {
   if (!row) return null;
   return {
@@ -210,9 +197,6 @@ async function getSessionWithUser(token) {
   };
 }
 
-/* =======================
-   Auth helpers
-======================= */
 async function checkAdminPageAccess(req, res, next) {
   try {
     const token = req.cookies?.token;
@@ -262,12 +246,10 @@ async function checkAdminPageAccess(req, res, next) {
 app.use(adminPagePaths, checkAdminPageAccess);
 app.use(express.static(clientPath));
 
-// Генерация токена
 function generateToken() {
   return 'token_' + Math.random().toString(36).substr(2) + Date.now().toString(36);
 }
 
-// Middleware для проверки аутентификации
 async function requireAuth(req, res, next) {
   try {
     const token = req.cookies?.token;
@@ -297,7 +279,6 @@ async function requireAuth(req, res, next) {
   }
 }
 
-// Middleware для проверки ролей
 function requireRole(role) {
   return (req, res, next) => {
     if (!req.user) {
@@ -312,115 +293,6 @@ function requireRole(role) {
   };
 }
 
-/* =======================
-   DB init
-======================= */
-// async function initDb() {
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS users (
-//       id BIGSERIAL PRIMARY KEY,
-//       fullname TEXT NOT NULL,
-//       phone TEXT NOT NULL UNIQUE,
-//       email TEXT NOT NULL UNIQUE,
-//       position TEXT NOT NULL,
-//       username TEXT NOT NULL UNIQUE,
-//       password TEXT NOT NULL,
-//       role TEXT NOT NULL,
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS tasks (
-//       id BIGSERIAL PRIMARY KEY,
-//       title TEXT NOT NULL,
-//       description TEXT NULL,
-//       priority TEXT NOT NULL DEFAULT 'Средний',
-//       deadline TIMESTAMPTZ NULL,
-//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS documents (
-//       id BIGSERIAL PRIMARY KEY,
-//       name TEXT NOT NULL,
-//       file_name TEXT NOT NULL,
-//       file_type TEXT NOT NULL,
-//       upload_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       file_path TEXT NOT NULL,
-//       user_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL,
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS sessions (
-//       id BIGSERIAL PRIMARY KEY,
-//       token TEXT NOT NULL UNIQUE,
-//       expires_at TIMESTAMPTZ NOT NULL,
-//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS notifications (
-//       id BIGSERIAL PRIMARY KEY,
-//       title TEXT NOT NULL,
-//       body TEXT NOT NULL,
-//       is_read BOOLEAN NOT NULL DEFAULT FALSE,
-//       user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-
-//   await query(`
-//     CREATE TABLE IF NOT EXISTS announcements (
-//       id BIGINT PRIMARY KEY,
-//       text TEXT NOT NULL DEFAULT '',
-//       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-//       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-//     );
-//   `);
-// }
-
-/* =======================
-   Функция создания пользователей по умолчанию
-======================= */
-// async function createDefaultUsers() {
-//   const user = await getUserByUsername('123');
-//   if (user) return;
-
-//   await query(
-//     `
-//     INSERT INTO users (
-//       fullname, phone, email, position, role, username, password, created_at, updated_at
-//     ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-//     `,
-//     [
-//       'Ботвиновский Игорь Николаевич',
-//       '+79873414633',
-//       'Igorbot2007@mail.ru',
-//       'Веб-разработчик (стажёр)',
-//       'admin',
-//       '123',
-//       bcrypt.hashSync('123', 10)
-//     ]
-//   );
-
-//   console.log('✅ Создан основной пользователь');
-// }
-
-/* =======================
-   Загрузка файлов
-======================= */
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, '..', 'client', 'uploads');
@@ -440,9 +312,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* =======================
-   API для аутентификации
-======================= */
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -494,7 +363,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Выход из системы
 app.post('/api/logout', requireAuth, async (req, res) => {
   try {
     await query(`DELETE FROM sessions WHERE token = $1`, [req.token]);
@@ -506,7 +374,6 @@ app.post('/api/logout', requireAuth, async (req, res) => {
   }
 });
 
-// Проверка текущего пользователя
 app.get('/api/me', requireAuth, (req, res) => {
   res.json({ user: req.user });
 });
@@ -528,9 +395,6 @@ app.get('/profile', (req, res) => {
   res.sendFile(path.join(clientPath, 'profile.html'));
 });
 
-/* =======================
-   API для задач (требуется аутентификация)
-======================= */
 app.get('/api/tasks', requireAuth, async (req, res) => {
   try {
     const { sortBy } = req.query;
@@ -665,11 +529,6 @@ function resolveUploadPathSafe(filePath) {
   return fullPath;
 }
 
-/* =======================
-   API для документов (требуется аутентификация)
-======================= */
-
-// Загрузка файла
 app.post('/upload', requireAuth, upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Файл не загружен' });
@@ -703,7 +562,6 @@ app.get('/download/:fileName', requireAuth, async (req, res) => {
   }
 });
 
-// Получение документа по ID
 app.get('/api/documents/:id', requireAuth, async (req, res) => {
   try {
     let sql = `SELECT * FROM documents WHERE id = $1`;
@@ -730,7 +588,6 @@ app.get('/api/documents/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Получение всех документов с сортировкой
 app.get('/api/documents', requireAuth, async (req, res) => {
   try {
     const { sortBy } = req.query;
@@ -775,7 +632,6 @@ app.get('/api/documents', requireAuth, async (req, res) => {
   }
 });
 
-// Обновление документа
 app.put('/api/documents/:id', requireAuth, async (req, res) => {
   try {
     let selectSql = `SELECT * FROM documents WHERE id = $1`;
@@ -822,7 +678,6 @@ app.put('/api/documents/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Удаление документа + физического файла
 app.delete('/api/documents/:id', requireAuth, async (req, res) => {
   try {
     let selectSql = `SELECT * FROM documents WHERE id = $1`;
@@ -866,11 +721,6 @@ app.delete('/api/documents/:id', requireAuth, async (req, res) => {
   }
 });
 
-/* =======================
-   Страницы (с проверкой аутентификации)
-======================= */
-
-// Middleware для проверки аутентификации на страницах
 async function checkPageAuth(req, res, next) {
   try {
     if (req.path === '/login') {
@@ -902,7 +752,6 @@ async function checkPageAuth(req, res, next) {
   }
 }
 
-// Применяем middleware ко всем страницам
 app.use(['/tasks', '/documents', '/profile'], checkPageAuth);
 
 app.get('/', (req, res) => {
@@ -925,11 +774,6 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(clientPath, 'join.html'));
 });
 
-/* =======================
-   УВЕДОМЛЕНИЯ
-======================= */
-
-// 0) Админ: список пользователей
 app.get('/api/admin/users', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const { rows } = await query(
@@ -946,7 +790,6 @@ app.get('/api/admin/users', requireAuth, requireRole('admin'), async (req, res) 
   }
 });
 
-// 1) Получить уведомления (только свои)
 app.get('/api/notifications', requireAuth, async (req, res) => {
   try {
     const order = (req.query.order === 'old') ? 'ASC' : 'DESC';
@@ -974,7 +817,6 @@ app.get('/api/notifications', requireAuth, async (req, res) => {
   }
 });
 
-// 2) Пометить как прочитанное
 app.post('/api/notifications/:id/read', requireAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -998,7 +840,6 @@ app.post('/api/notifications/:id/read', requireAuth, async (req, res) => {
   }
 });
 
-// 3) Удалить уведомление
 app.delete('/api/notifications/:id', requireAuth, async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -1018,7 +859,6 @@ app.delete('/api/notifications/:id', requireAuth, async (req, res) => {
   }
 });
 
-// 4) Админ: отправить уведомление
 app.post('/api/admin/notifications', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const userId = Number(req.body.userId);
@@ -1051,9 +891,6 @@ app.post('/api/admin/notifications', requireAuth, requireRole('admin'), async (r
   }
 });
 
-/* =======================
-   ОБЪЯВЛЕНИЕ
-======================= */
 async function ensureAnnouncementRow() {
   await query(
     `
@@ -1064,7 +901,6 @@ async function ensureAnnouncementRow() {
   );
 }
 
-// API: получить объявление
 app.get('/api/announcement', requireAuth, async (req, res) => {
   try {
     await ensureAnnouncementRow();
@@ -1077,7 +913,6 @@ app.get('/api/announcement', requireAuth, async (req, res) => {
   }
 });
 
-// API: изменить объявление
 app.put('/api/admin/announcement', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     await ensureAnnouncementRow();
@@ -1099,23 +934,18 @@ app.put('/api/admin/announcement', requireAuth, requireRole('admin'), async (req
   }
 });
 
-/* =======================
-   СТРАНИЦА админ-редактирования
-======================= */
 app.use(['/tasks', '/documents', '/profile', '/admin_announcement'], checkPageAuth);
 
 app.get('/admin_announcement', (req, res) => {
   res.sendFile(path.join(clientPath, 'admin_announcement.html'));
 });
 
-// ===== Admin Documents Page =====
 app.use(['/admin_documents'], checkPageAuth);
 
 app.get('/admin_documents', (req, res) => {
   res.sendFile(path.join(clientPath, 'admin_documents.html'));
 });
 
-// Скачать документ по id
 app.get('/api/admin/documents/:id/download', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const { rows } = await query(
@@ -1139,11 +969,6 @@ app.get('/api/admin/documents/:id/download', requireAuth, requireRole('admin'), 
   }
 });
 
-/* =======================
-   ДОКУМЕНТЫ (АДМИН)
-======================= */
-
-// Создание документа
 app.post('/api/documents', requireAuth, async (req, res) => {
   try {
     let { name, fileName, fileType, filePath } = req.body;
@@ -1175,7 +1000,6 @@ app.post('/api/documents', requireAuth, async (req, res) => {
   }
 });
 
-// Админ-API: все документы + владелец + сортировка/фильтр
 app.get('/api/admin/documents', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const sortBy = String(req.query.sortBy || 'new').toLowerCase();
@@ -1222,11 +1046,6 @@ app.get('/api/admin/documents', requireAuth, requireRole('admin'), async (req, r
   }
 });
 
-/* =======================
-   USERS (ADMIN)
-======================= */
-
-// Отдать полный список пользователей
 app.get('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const { rows } = await query(
@@ -1243,7 +1062,6 @@ app.get('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
   }
 });
 
-// Создание пользователя
 app.post('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const fullname = String(req.body?.fullname ?? '').trim();
@@ -1302,7 +1120,6 @@ app.post('/api/users', requireAuth, requireRole('admin'), async (req, res) => {
   }
 });
 
-// Редактирование пользователя
 app.put('/api/users/:id', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -1387,7 +1204,6 @@ app.put('/api/users/:id', requireAuth, requireRole('admin'), async (req, res) =>
   }
 });
 
-// Удаление пользователя
 app.delete('/api/users/:id', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -1402,16 +1218,10 @@ app.delete('/api/users/:id', requireAuth, requireRole('admin'), async (req, res)
   }
 });
 
-/* =======================
-   404
-======================= */
 app.use((req, res) => {
   res.status(404).json({ error: 'Маршрут не найден' });
 });
 
-/* =======================
-   Инициализация и запуск
-======================= */
 async function start() {
   try {
     await pool.query('SELECT 1');

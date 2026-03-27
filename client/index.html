@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Внутренний портал - ДЕЛА А</title>
-    <!-- Шрифты -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <!-- Стили (используем из первого варианта) -->
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/layout.css">
     <link rel="stylesheet" href="/styles/index.css">
@@ -19,10 +17,8 @@
 </script>
 </head>
 <body>
-    <!-- контейнер всего сайта -->
     <div class="site-container">
         
-        <!-- шапка сайта (из первого варианта, но с функциональными ссылками) -->
         <header class="header">
             <a href="index.html" class="logo-button">LTS</a>
             
@@ -34,15 +30,12 @@
             </div>
         </header>
 
-        <!-- основное содержимое -->
         <main class="main-content">
             
-            <!-- блок с фразой дня (динамический из второго варианта) -->
             <section class="daily-phrase">
                 <h1 id="daily-message">Загрузка...</h1>
             </section>
             
-            <!-- блок объявления (динамический из второго варианта) -->
             <section class="announcement-section">
                 <div class="announcement-container">
                     <h2 class="section-title announcement-title">Объявление всем сотрудникам</h2>
@@ -52,11 +45,9 @@
                 </div>
             </section>
             
-            <!-- блок главных задач (динамический из второго варианта) -->
             <section class="tasks-section">
                 <h2 class="section-title tasks-title">Важные задачи</h2>
                 <div class="tasks-container" id="tasksPreview">
-                    <!-- Динамически генерируемые задачи будут здесь -->
                 </div>
             </section>
             
@@ -64,15 +55,12 @@
             
         </main>
 
-        <!-- подвал сайта (полностью из первого варианта) -->
         <footer class="footer">
             
-            <!-- левая колонка подвала -->
             <div class="footer-column footer-left">
                 <a href="img/privacy.docx" download class="privacy-link">Политика конфиденциальности</a>
             </div>
             
-            <!-- центральная колонка подвала (навигация) -->
             <div class="footer-column footer-center">
                 <nav class="footer-nav">
                     <a href="index.html" class="footer-nav-button">Главная</a>
@@ -84,7 +72,6 @@
                 </nav>
             </div>
             
-            <!-- правая колонка подвала -->
             <div class="footer-right">
                 <h3 class="footer-title">Политика</h3>
                 <p class="footer-text">2026 © Все права защищены. Внутренние стандарты безопасности и конфиденциальности.</p>
@@ -93,7 +80,6 @@
         </footer>
     </div>
 
-    <!-- JS скрипты -->
     <script src="/app.js"></script>
     <script>
         (async () => {

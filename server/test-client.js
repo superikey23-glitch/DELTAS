@@ -1,4 +1,3 @@
-// server/test-client.js
 const axios = require('axios');
 
 const API_URL = 'http://localhost:3000/api';
@@ -7,12 +6,10 @@ async function testAPI() {
     try {
         console.log('🚀 Тестирование API задач...\n');
 
-        // 1. Проверка соединения
         console.log('1. Проверка соединения...');
         const testRes = await axios.get(`${API_URL}/test`);
         console.log('✅', testRes.data.message, '\n');
 
-        // 2. Создание тестовых задач
         console.log('2. Создание тестовых задач...');
         const tasksToCreate = [
             { title: 'Первая задача', priority: 'Высокий' },
@@ -26,7 +23,6 @@ async function testAPI() {
         }
         console.log('');
 
-        // 3. Получение всех задач
         console.log('3. Получение всех задач...');
         const allTasks = await axios.get(`${API_URL}/tasks`);
         console.log(`✅ Найдено задач: ${allTasks.data.length}`);
@@ -35,7 +31,6 @@ async function testAPI() {
         });
         console.log('');
 
-        // 4. Сортировка по приоритету
         console.log('4. Сортировка по приоритету...');
         const sortedTasks = await axios.get(`${API_URL}/tasks?sortBy=priority`);
         console.log('✅ Отсортировано по приоритету');
@@ -44,7 +39,6 @@ async function testAPI() {
         });
         console.log('');
 
-        // 5. Статистика
         console.log('5. Статистика...');
         const stats = await axios.get(`${API_URL}/stats`);
         console.log(`✅ Всего задач: ${stats.data.total}`);

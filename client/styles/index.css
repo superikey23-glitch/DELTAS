@@ -1,7 +1,7 @@
-/* index */
 
 
-/* блок с фразой дня */
+
+
 .daily-phrase {
     width: 100%;
     height: 97px;
@@ -25,7 +25,7 @@
     padding: 0 20px;
 }
 
-/* заголовки секций */
+
 .section-title {
     text-align: center;
     font-weight: 700;
@@ -42,7 +42,7 @@
     margin-bottom: 32px;
 }
 
-/* блок объявления */
+
 .announcement-section {
     margin-bottom: 40px;
 }
@@ -73,13 +73,13 @@
 
     min-height: 154px;
 
-    white-space: pre-wrap;      /* ← вот это главное */
+    white-space: pre-wrap;      
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
 
-/* блок главных задач */
+
 .tasks-section {
     margin-bottom: 40px;
 }
@@ -112,7 +112,7 @@
 }
 
 
-/* ? */
+
 .task-bullet {
     position: absolute;
     left: 20px;
@@ -131,7 +131,7 @@
     color: #334230;
 }
 
-/* блок последних документов */
+
 .documents-section {
     margin-bottom: 30px;
 }

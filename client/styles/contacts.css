@@ -1,4 +1,4 @@
-/* ===== CONTACTS PAGE (fits base.css site-container 1206px) ===== */
+
 
 .contacts-shell{
   width: 100%;
@@ -6,11 +6,11 @@
   flex-direction: column;
   align-items: center;
 
-  /* чтобы визуально было как в проекте */
+  
   padding: 24px 16px 40px;
 }
 
-/* Заголовок "Контакты" */
+
 .contacts-title-section{
   width: 100%;
   display: flex;
@@ -27,7 +27,7 @@
   color: #374151;
 }
 
-/* Большой жёлтый блок (832x930) */
+
 .contacts-board{
   width: 832px;
   min-height: 0;
@@ -36,7 +36,7 @@
   border-radius: 52px;
   box-sizing: border-box;
 
-  /* чтобы внутри легли 2 колонки по 160+423 и воздушно как на макете */
+  
   padding: 64px 76px;
 
   display: flex;
@@ -44,7 +44,7 @@
   gap: 44px;
 }
 
-/* Строки с “шахматкой” */
+
 .contact-row{
   width: 100%;
   display: flex;
@@ -53,7 +53,7 @@
   gap: 46px;
 }
 
-/* Фото (160x160 круг) */
+
 .contact-photo{
   width: 160px;
   height: 160px;
@@ -72,7 +72,7 @@
   display: block;
 }
 
-/* Иконка бухгалтерии — пусть выглядит как на скрине */
+
 .icon-photo{
   background: transparent;
   display: flex;
@@ -87,7 +87,7 @@
   object-fit: contain;
 }
 
-/* Карточки (423x160) */
+
 .contact-card{
   width: 423px;
   height: 160px;
@@ -141,16 +141,16 @@
   line-height: 22px;
 }
 
-/* Чередование как на макете */
+
 .row-right .contact-photo{ order: 1; }
 .row-right .contact-card{ order: 2; }
 
 .row-left .contact-card{ order: 1; }
 .row-left .contact-photo{ order: 2; }
 
-/* ===== ADAPTIVE ===== */
 
-/* чтобы блок не вылезал из .site-container */
+
+
 @media (max-width: 920px){
   .contacts-board{
     width: min(832px, 100%);
@@ -163,7 +163,7 @@
   }
 }
 
-/* планшет/телефон: всё в колонку */
+
 @media (max-width: 720px){
   .contacts-board{
     padding: 34px 20px;
@@ -178,7 +178,7 @@
     gap: 14px;
   }
 
-  /* на мобиле всегда: сначала фото, потом карточка */
+  
   .row-left .contact-card,
   .row-right .contact-card{
     order: 2;
@@ -213,7 +213,7 @@
   }
 }
 
-/* очень узкие экраны */
+
 @media (max-width: 420px){
   .contact-photo{
     width: 132px;

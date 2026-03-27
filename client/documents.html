@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Документы — Внутренний портал</title>
 
-    <!-- Шрифты -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
-    <!-- Общие стили сайта -->
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/layout.css">
     <link rel="stylesheet" href="/styles/documents.css">
@@ -24,7 +22,6 @@
 
 <div class="site-container">
 
-    <!-- ===== ШАПКА ===== -->
     <header class="header">
         <a href="index.html" class="logo-button">LTS</a>
 
@@ -36,15 +33,12 @@
         </div>
     </header>
 
-    <!-- ===== ОСНОВНОЕ СОДЕРЖИМОЕ ===== -->
     <main class="main-content documents-page">
 
-        <!-- Заголовок страницы -->
         <section class=" documents-header">
             <h1 class="section-title documents-title">Документы</h1>
         </section>
 
-        <!-- СОРТИРОВКА -->
         <section class="documents-sorting">
         <div class="documents-filters" id="controls">
 
@@ -69,17 +63,13 @@
         </div>
         </section>
 
-        <!-- СЕТКА ДОКУМЕНТОВ -->
         <section class="documents-section documents-list">
             <div class="documents-grid" id="documents-grid">
-                <!-- Карточки документов (JS) -->
             </div>
         </section>
 
-        <!-- СОЗДАНИЕ ДОКУМЕНТА -->
         <section class="documents-section documents-create">
 
-            <!-- КНОПКА ОТКРЫТИЯ -->
             <div id="documents-grid" class="documents-grid">
             <div id="open-create-form" class="document-card new-document-card" role="button" tabindex="0">
                 <div class="new-card-inner">
@@ -91,11 +81,8 @@
                 </div>
             </div>
 
-            <!-- ⚠️ create-form НЕ МЕНЯЕМ (он уже есть в твоём HTML) -->
-            <!-- просто оставь его как есть, скрипт сам будет вставлять/убирать его из grid -->
             </div>
 
-            <!-- ФОРМА СОЗДАНИЯ (СКРЫТА) -->
             <div
                 class="document-create-card document-card document-card--create"
                 id="create-form"
@@ -129,7 +116,6 @@
 
     </main>
 
-    <!-- ===== ПОДВАЛ ===== -->
     <footer class="footer">
 
         <div class="footer-column footer-left">
@@ -160,7 +146,6 @@
 
 </div>
 
-<!-- JS -->
 <script src="/js/documents.js"></script>
 
 </body>

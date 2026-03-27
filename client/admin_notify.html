@@ -30,7 +30,6 @@
     <section class="an-panel">
       <form id="sendForm" class="an-form">
 
-        <!-- SELECT с автошириной -->
         <div class="an-select-wrap an-to">
           <select id="userSelect" class="an-select" required>
             <option value="">Загрузка...</option>
@@ -94,7 +93,7 @@ function updateTitlePlaceholder() {
     : TITLE_PLACEHOLDER_FULL;
 }
 
-/* загрузка пользователей */
+
 async function loadUsers() {
   try {
     const res = await fetch('/api/users', { credentials: 'include' });
@@ -141,8 +140,6 @@ function updateSelectWidth() {
     ? Math.floor(panelInnerWidth)
     : 1038;
   const minW = Math.min(baseMinW, maxW);
-
-  // Плейсхолдер ("Выберите пользователя") всегда возвращаем к базовой ширине.
   if (!userSelect.value) {
     wrap.style.setProperty('width', minW + 'px', 'important');
     return;
@@ -179,7 +176,7 @@ window.addEventListener('resize', () => {
   updateTitlePlaceholder();
 });
 
-/* отправка */
+
 form.onsubmit = async (e) => {
   e.preventDefault();
   msg.textContent = '';

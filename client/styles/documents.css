@@ -1,6 +1,4 @@
-/* =========================
-   ОБЩЕЕ
-========================= */
+
 
 .documents-page {
     padding-top: 20px;
@@ -15,9 +13,7 @@
 .documents-header {
     margin: 13px 0 33px 0;
 }
-/* =========================
-   ЗАГОЛОВОК
-========================= */
+
 
 .documents-title {
     font-size: 32px;
@@ -27,9 +23,7 @@
 }
 
 
-/* =========================
-   СОРТИРОВКА / ФИЛЬТРЫ
-========================= */
+
 
 .documents-sorting {
     margin-left: -24px;
@@ -39,7 +33,7 @@
 .documents-filters {
     width: 100%;
 
-    /* ❗️Было height: 78px; — ломало верстку при большом числе кнопок */
+    
     min-height: 78px;
     height: auto;
 
@@ -51,7 +45,7 @@
     justify-content: center;
     align-items: center;
 
-    /* ✅ чтобы группы и кнопки переносились, а не вылезали вниз поверх карточек */
+    
     flex-wrap: wrap;
 
     gap: 14px;
@@ -60,7 +54,7 @@
     box-sizing: border-box;
 }
 
-/* ✅ Группы кнопок (sort / filter) */
+
 .controls-block {
     display: flex;
     align-items: center;
@@ -68,19 +62,14 @@
     flex-wrap: wrap;
 }
 
-/* разделитель | */
+
 .controls-sep {
     font-weight: 700;
     color: #EAB308;
     font-size: 20px;
 }
 
-/* =========================
-   КНОПКИ ПАНЕЛИ (один стиль для всех)
-   Работает и для:
-   - .documents-filters button
-   - .documents-filter (которые использует JS)
-========================= */
+
 
 .documents-filters button,
 .documents-filter {
@@ -105,7 +94,7 @@
     cursor: pointer;
 }
 
-/* активная */
+
 .documents-filters button.active,
 .documents-filter.active {
     background: #EAB308;
@@ -113,7 +102,7 @@
     color: #FFFFFF;
 }
 
-/* неактивная (нужно JS-логике админки) */
+
 .documents-filter.inactive {
     background: #FFFFFF;
     border: 2px solid #EAB308;
@@ -121,9 +110,7 @@
 }
 
 
-/* =========================
-   СЕТКА ДОКУМЕНТОВ
-========================= */
+
 
 .documents-grid {
     display: grid;
@@ -133,9 +120,7 @@
 }
 
 
-/* =========================
-   КАРТОЧКА ДОКУМЕНТА
-========================= */
+
 
 .document-card {
     position: relative;
@@ -155,9 +140,7 @@
 }
 
 
-/* =========================
-   ДАТА
-========================= */
+
 
 .document-date {
     position: absolute;
@@ -180,9 +163,7 @@
 }
 
 
-/* =========================
-   ТЕКСТ
-========================= */
+
 
 .document-name {
     font-size: 20px;
@@ -203,9 +184,7 @@
 }
 
 
-/* =========================
-   КНОПКИ — ОБЩИЕ
-========================= */
+
 
 .document-btn {
     height: 46px;
@@ -218,9 +197,7 @@
 }
 
 
-/* =========================
-   РЕДАКТИРОВАТЬ / УДАЛИТЬ
-========================= */
+
 
 .document-actions-row {
     display: flex;
@@ -243,9 +220,7 @@
 }
 
 
-/* =========================
-   СКАЧАТЬ
-========================= */
+
 
 .document-btn-wide {
     width: 471px;
@@ -263,9 +238,7 @@
 }
 
 
-/* =========================
-   СОЗДАНИЕ ДОКУМЕНТА
-========================= */
+
 
 .documents-create {
     display: flex;
@@ -321,9 +294,7 @@
 }
 
 
-/* =========================
-   ADD DOCUMENT CARD (как "Добавить задачу")
-========================= */
+
 
 .new-document-card {
     background: #FEF9C3;

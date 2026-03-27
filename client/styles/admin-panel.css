@@ -1,32 +1,32 @@
-/* Точное повторение по меркам с картинки подтверждения */
+
 
 .admin-main{
-  /* расстояния в макете: от "Внутренний портал" до заголовка/плашек */
-  padding-top: 41px;   /* сверху до заголовка */
-  padding-bottom: 94px;/* от нижнего ряда до футера */
+  
+  padding-top: 41px;   
+  padding-bottom: 94px;
 }
 
-/* Заголовок "Админ панель" */
+
 .admin-title{
-  margin: 0 0 57px; /* от заголовка до верхнего ряда плашек */
+  margin: 0 0 57px; 
   text-align: center;
 
   font-weight: 700;
-  font-size: 34px;      /* как на твоей схеме */
+  font-size: 34px;      
   line-height: 31px;
   color: #374151;
 }
 
-/* Сетка 2x2 */
+
 .admin-grid{
   display: grid;
   grid-template-columns: 511px 511px;
-  column-gap: 57px; /* между колонками */
-  row-gap: 52px;    /* между рядами */
+  column-gap: 57px; 
+  row-gap: 52px;    
   justify-content: center;
 }
 
-/* Плашка */
+
 .admin-card{
   width: 511px;
   height: 215px;
@@ -36,7 +36,7 @@
   text-decoration: none;
   display: block;
 
-  /* лёгкая интерактивность, без сдвига размеров */
+  
   transition: filter .15s ease, transform .15s ease;
 }
 
@@ -45,7 +45,7 @@
   transform: translateY(-1px);
 }
 
-/* Внутреннее позиционирование по вертикальным отступам */
+
 .admin-card-inner{
 
 
@@ -54,47 +54,47 @@
   align-items: center;
   text-align: center;
 
-  padding-top: 33px;   /* от верхней границы плашки до иконки */
-  padding-bottom: 54px;/* от подписи до низа плашки */
+  padding-top: 33px;   
+  padding-bottom: 54px;
 
 }
 
-/* Иконка */
+
 .admin-icon{
   display: block;
-   /* если у твоих svg другой “правильный” размер — скажи, поменяю */
+   
   width: auto;
-  margin: 0 0 10px; /* от иконки до заголовка */
+  margin: 0 0 10px; 
 }
 
-/* Главный текст */
+
 .admin-card-title{
-  margin: 0 0 12px; /* от заголовка до подзаголовка */
+  margin: 0 0 12px; 
 
   font-weight: 700;
-  font-size: 32px;    /* по твоим данным */
+  font-size: 32px;    
   line-height: 38px;
   color: #FFFFFF;
 }
 
-/* Второстепенный текст */
+
 .admin-card-subtitle{
   margin: 0;
 
   font-weight: 400;
-  font-size: 20px;    /* по твоим данным */
+  font-size: 20px;    
   line-height: 24px;
   color: #FFFFFF;
 }
 
-/* Адаптив: при узкой ширине делаем 1 колонку */
+
 @media (max-width: 1120px){
   .admin-grid{
     grid-template-columns: 511px;
   }
 }
 
-/* На маленьких — плашка тянется на 100%, но сохраняет пропорции */
+
 @media (max-width: 560px){
   .admin-grid{
     grid-template-columns: min(511px, 100%);

@@ -1,5 +1,5 @@
-/* layout */
-/* шапка сайта */
+
+
 .header {
     width: 100%;
     height: 84px;
@@ -11,7 +11,7 @@
     background: #FFFFFF;
 }
 
-/* кнопка логотипа */
+
 .logo-button {
     width: 175px;
     height: 48px;
@@ -27,7 +27,7 @@
     text-decoration: none;
 }
 
-/* навигация в шапке */
+
 .nav-link {
     font-weight: 600;
     font-size: 18px;
@@ -45,7 +45,7 @@
     color: #EAB308;
 }
 
-/* кнопки в шапке */
+
 .header-buttons {
     display: flex;
     gap: 16px;
@@ -73,14 +73,14 @@
     background: #d4a107;
 }
 
-/* основное содержимое */
+
 .main-content {
     padding: 20px 24px;
     flex: 1;
 }
 .main-content { padding: 20px 24px; }
 
-/* подвал сайта */
+
 .footer {
     width: 100%;
     height: 178px;
@@ -99,7 +99,7 @@
     padding: 18px 44px 18px 44px;
 }
 
-/* левая колонка подвала */
+
 .footer-left {
     width: 272px;
     display: flex;
@@ -117,7 +117,7 @@
     width: 228px;
 }
 
-/* центральная колонка подвала */
+
 .footer-center {
     margin: 0 24px;
 }
@@ -153,7 +153,7 @@
     background: #d4a107;
 }
 
-/* правая колонка подвала */
+
 .footer-right {
     width: 272px;
     height: 138px;
@@ -181,7 +181,7 @@
     color: #374151;
 }
 
-/* адаптивность для планшетов */
+
 @media (max-width: 1200px) {
     .site-container {
         max-width: 95%;
@@ -217,7 +217,7 @@
     }
 }
 
-/* адаптивность для мобильных */
+
 @media (max-width: 768px) {
     .site-container {
         width: 100%;
@@ -305,7 +305,7 @@
     }
 }
 
-/* адаптивность для очень маленьких экранов */
+
 @media (max-width: 480px) {
     .footer-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr));

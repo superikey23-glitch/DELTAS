@@ -1,4 +1,4 @@
-/* ===== PROFILE PAGE (pixel-like to mock) ===== */
+
 
 .profile-shell{
   width: 100%;
@@ -8,7 +8,7 @@
   padding: 28px 16px 40px;
 }
 
-/* Заголовок "Профиль" */
+
 .page-title-section{
   width: 100%;
   display: flex;
@@ -28,7 +28,7 @@
   color: #374151;
 }
 
-/* Обёртка карточки (жёлтый блок) */
+
 .profile-card{
   width: 538px;
   background: #FEF9C3;
@@ -36,11 +36,11 @@
   border-radius: 15px;
   box-sizing: border-box;
 
-  /* как в макете */
+  
   padding: 38px 39px 28px;
 }
 
-/* Форма внутри жёлтого блока */
+
 .profile-form{
   width: 100%;
   display: flex;
@@ -49,7 +49,7 @@
   box-sizing: border-box;
 }
 
-/* Подписи label на макете не видны — прячем, но элементы не удаляем */
+
 .profile-form > label{
   display: block;
   font-size: 0;
@@ -57,7 +57,7 @@
   color: transparent;
 }
 
-/* Поля как белые прямоугольники */
+
 .profile-form input{
   width: 460px;
   height: 65px;
@@ -80,24 +80,23 @@
   outline: none;
 }
 
-/* чтобы disabled не серел */
+
 .profile-form input:disabled{
   opacity: 1;
   -webkit-text-fill-color: #334230;
   cursor: default;
 }
 
-/* Порядок полей как на скрине:
-   1 ФИО, 2 Email, 3 Телефон, 4 Должность, 5 Роль, 6 Логин, 7 Пароль */
-.profile-form > label:nth-of-type(1){ order: 1; } /* fullname */
-.profile-form > label:nth-of-type(2){ order: 3; } /* phone */
-.profile-form > label:nth-of-type(3){ order: 2; } /* email */
-.profile-form > label:nth-of-type(4){ order: 4; } /* position */
-.profile-form > label:nth-of-type(5){ order: 5; } /* role */
-.profile-form > label:nth-of-type(6){ order: 6; } /* username */
-.profile-form > label:nth-of-type(7){ order: 7; } /* password */
 
-/* Пароль: кнопка "Показать пароль" снизу в той же карточке */
+.profile-form > label:nth-of-type(1){ order: 1; } 
+.profile-form > label:nth-of-type(2){ order: 3; } 
+.profile-form > label:nth-of-type(3){ order: 2; } 
+.profile-form > label:nth-of-type(4){ order: 4; } 
+.profile-form > label:nth-of-type(5){ order: 5; } 
+.profile-form > label:nth-of-type(6){ order: 6; } 
+.profile-form > label:nth-of-type(7){ order: 7; } 
+
+
 .password-field{
   position: relative;
 }
@@ -123,7 +122,7 @@
   text-decoration: underline;
 }
 
-/* Кнопка "Выйти" теперь под жёлтым блоком */
+
 .logout-btn{
   width: 156px;
   height: 47px;

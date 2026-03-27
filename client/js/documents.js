@@ -1,27 +1,13 @@
 const grid = document.querySelector('.documents-list #documents-grid');
-
-// =========================
-// STATE
-// =========================
-let activeMode = null; // null, 'create' или 'edit'
-
-// состояние панели (как в админ документах)
+let activeMode = null;
 const controls = document.getElementById('controls');
 const state = {
-  sortBy: 'new',      // new | old | name
-  filterType: 'all'   // all | PDF | DOC | ...
+  sortBy: 'new',
+  filterType: 'all'
 };
-
-// =========================
-// CREATE UI ELEMENTS (moved up to be shared)
-// =========================
 const openBtn = document.getElementById('open-create-form');
 const form = document.getElementById('create-form');
 const cancelBtn = document.getElementById('cancel-create');
-
-// =========================
-// HELPERS: UI + DATA
-// =========================
 function setActive(groupSelector, attr, value) {
   const group = controls?.querySelector(groupSelector);
   if (!group) return;
@@ -62,17 +48,11 @@ function applyClientSortAndFilter(docs) {
 
   return out;
 }
-
-// =========================
-// MODE CLOSERS (NEW/UPDATED)
-// =========================
 function exitCreateModeUI({ rerender = true } = {}) {
-  // Закрываем UI создания без обязательного перерендеринга карточек
   if (form) form.style.display = 'none';
 
   if (openBtn) {
     openBtn.style.display = 'flex';
-    // держим кнопку первой
     if (openBtn.parentElement !== grid) grid.prepend(openBtn);
     else grid.prepend(openBtn);
   }
@@ -86,8 +66,6 @@ function exitCreateModeUI({ rerender = true } = {}) {
 
 function closeCreateIfOpen({ rerender = true } = {}) {
   if (activeMode !== 'create') return false;
-
-  // очищаем поля (как в твоей логике cancel-create)
   const nameEl = document.getElementById('new-name');
   const fileEl = document.getElementById('new-file');
   if (nameEl) nameEl.value = '';
@@ -99,48 +77,28 @@ function closeCreateIfOpen({ rerender = true } = {}) {
 
 function closeEditIfOpen() {
   if (activeMode !== 'edit') return false;
-
-  // корректнее всего закрывать через "Отмена" внутри открытого редактора
   const editCancel = grid?.querySelector('.document-btn--cancel');
   if (editCancel) {
     editCancel.click();
     return true;
   }
-
-  // fallback
   activeMode = null;
   renderDocuments(applyClientSortAndFilter(window.__documentsCache || []));
   return true;
 }
-
-// =========================
-// LOAD
-// =========================
 async function loadDocuments() {
   const res = await fetch('/api/documents');
   const documents = await res.json();
 
   window.__documentsCache = documents;
-
-  // применяем фильтр+сортировку как в админке
   renderDocuments(applyClientSortAndFilter(documents));
 }
-
-// =========================
-// RENDER (НЕ ЛОМАЕМ твою логику "кнопка/форма первой")
-// =========================
 function renderDocuments(documents) {
   if (!grid) return;
-
-  // 1) удаляем ТОЛЬКО карточки документов, которые рисуем сами
   grid.querySelectorAll('[data-doc-card="1"]').forEach(el => el.remove());
-
-  // 2) гарантируем, что кнопка находится в НУЖНОЙ сетке
   if (openBtn && openBtn.parentElement !== grid) {
     grid.prepend(openBtn);
   }
-
-  // 3) первый элемент: либо форма, либо кнопка (форма именно на месте кнопки)
   if (activeMode === 'create') {
     if (form) {
       form.style.display = 'flex';
@@ -155,8 +113,6 @@ function renderDocuments(documents) {
       grid.prepend(openBtn);
     }
   }
-
-  // 4) рисуем документы
   documents.forEach(doc => {
     const card = document.createElement('div');
     card.className = 'document-card';
@@ -181,17 +137,12 @@ function renderDocuments(documents) {
     grid.appendChild(card);
   });
 }
-
-// =========================
-// CONTROLS (как в админ документах)
-// =========================
 if (controls) {
-  // выставим дефолты, если в HTML нет правильных active/inactive
   setActive('[data-kind="sort"]', 'data-sort', state.sortBy);
   setActive('[data-kind="filter"]', 'data-filter', state.filterType);
 
   controls.addEventListener('click', (e) => {
-    if (activeMode) return; // блокировка смены сортировки/фильтра во время create/edit
+    if (activeMode) return;
 
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -212,48 +163,30 @@ if (controls) {
     }
   });
 }
-
-// =========================
-// DOWNLOAD
-// =========================
 function downloadFile(fileName) {
   window.location.href = `/download/${fileName}`;
 }
-
-// =========================
-// DELETE
-// =========================
 async function deleteDocument(id) {
-  if (activeMode) return; // защита от удаления во время редактирования
+  if (activeMode) return;
   if (!confirm('Удаление документа?')) return;
 
   await fetch(`/api/documents/${id}`, { method: 'DELETE' });
   loadDocuments();
 }
-
-// =========================
-// EDIT (UPDATED: закрывает create без перерендера)
-// =========================
 async function editDocument(id, btn) {
   if (activeMode === 'create') {
-    // Ключевой момент: закрываем create-mode БЕЗ renderDocuments,
-    // иначе btn/card станут "мертвыми" из-за перерендера
     closeCreateIfOpen({ rerender: false });
   }
 
-  if (activeMode) return; // блокировка нескольких редактирований
+  if (activeMode) return;
   activeMode = 'edit';
 
   const card = btn.closest('.document-card');
-  const originalHTML = card.innerHTML; // сохранение для отмены
-
-  // получение данных документа
+  const originalHTML = card.innerHTML;
   const res = await fetch(`/api/documents/${id}`);
   const doc = await res.json();
 
   const shortFilename = doc.fileName.split('-').slice(1).join('-');
-
-  // вставка формы редактирования
   card.innerHTML = `
       <input type="text" class="document-input" id="edit-name-${id}" value="${doc.name}">
       <input type="file" class="document-input" id="edit-file-${id}">
@@ -268,8 +201,6 @@ async function editDocument(id, btn) {
 
   const fileInput = card.querySelector(`#edit-file-${id}`);
   const fileLabel = card.querySelector(`#current-file-${id}`);
-
-  // обновление названия при выборе файла
   fileInput.addEventListener('change', () => {
     if (fileInput.files[0]) {
       fileLabel.textContent = `Выбранный файл: ${fileInput.files[0].name}`;
@@ -278,17 +209,11 @@ async function editDocument(id, btn) {
 
   const saveBtn = card.querySelector('.document-btn--save');
   const cancelBtnLocal = card.querySelector('.document-btn--cancel');
-
-  // отмена редактирования
   cancelBtnLocal.addEventListener('click', () => {
     card.innerHTML = originalHTML;
     activeMode = null;
-
-    // после отмены редактирования перерисуем по текущему фильтру/сорту
     renderDocuments(applyClientSortAndFilter(window.__documentsCache || []));
   });
-
-  // сохранение изменений
   saveBtn.addEventListener('click', async () => {
     const newName = card.querySelector(`#edit-name-${id}`).value.trim();
     const file = fileInput.files[0];
@@ -297,16 +222,12 @@ async function editDocument(id, btn) {
       alert('Ввод названия документа');
       return;
     }
-
-    // подготовка данных для отправки
     const updateData = {
       name: newName,
       fileName: doc.fileName,
       fileType: doc.fileType,
       filePath: doc.filePath
     };
-
-    // обработка нового файла
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
@@ -322,8 +243,6 @@ async function editDocument(id, btn) {
       updateData.fileType = file.name.split('.').pop().toUpperCase();
       updateData.filePath = `uploads/${uploadData.fileName}`;
     }
-
-    // отправка на сервер
     await fetch(`/api/documents/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -334,12 +253,6 @@ async function editDocument(id, btn) {
     loadDocuments();
   });
 }
-
-// =========================
-// CREATE (UPDATED: закрывает edit, если открыт)
-// =========================
-
-// показ формы создания
 if (openBtn && form) {
   openBtn.addEventListener('click', () => {
     if (activeMode === 'edit') closeEditIfOpen();
@@ -348,8 +261,6 @@ if (openBtn && form) {
     activeMode = 'create';
     renderDocuments(applyClientSortAndFilter(window.__documentsCache || []));
   });
-
-  // чтобы карточка реагировала и на Enter / Space
   openBtn.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -357,11 +268,8 @@ if (openBtn && form) {
     }
   });
 }
-
-// скрытие формы создания
 if (cancelBtn && form) {
   cancelBtn.addEventListener('click', (e) => {
-    // на случай если кнопка внутри form (submit)
     e.preventDefault();
 
     const nameEl = document.getElementById('new-name');
@@ -369,15 +277,10 @@ if (cancelBtn && form) {
 
     if (nameEl) nameEl.value = '';
     if (fileEl) fileEl.value = '';
-
-    // обычное закрытие с перерисовкой (как у тебя было)
     exitCreateModeUI({ rerender: true });
   });
 }
-
-// создание документа
 document.getElementById('create-btn').addEventListener('click', async (e) => {
-  // на случай если кнопка внутри form (submit)
   e.preventDefault();
 
   if (activeMode !== 'create') return;
@@ -395,7 +298,6 @@ document.getElementById('create-btn').addEventListener('click', async (e) => {
   formData.append('file', file);
 
   try {
-    // загрузка файла на сервер
     const uploadRes = await fetch('/upload', {
       method: 'POST',
       body: formData
@@ -406,8 +308,6 @@ document.getElementById('create-btn').addEventListener('click', async (e) => {
     }
 
     const uploadData = await uploadRes.json();
-
-    // создание записи о документе
     const documentData = {
       name,
       fileName: uploadData.fileName,
@@ -424,20 +324,14 @@ document.getElementById('create-btn').addEventListener('click', async (e) => {
     if (!createRes.ok) {
       throw new Error('Ошибка создания документа');
     }
-
-    // очистка формы
     document.getElementById('new-name').value = '';
     fileInput.value = '';
 
     activeMode = null;
-    await loadDocuments(); // обновит cache и перерендерит с фильтром/сортом
+    await loadDocuments();
   } catch (error) {
     console.error('Ошибка создания документа:', error);
     alert('Не удалось создать документ: ' + error.message);
   }
 });
-
-// =========================
-// INIT
-// =========================
 loadDocuments();

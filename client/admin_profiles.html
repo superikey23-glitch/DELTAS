@@ -31,9 +31,7 @@
 
     <p id="status" class="status" aria-live="polite"></p>
 
-    <!-- Общая сетка 2×N: первый элемент – новый профиль, дальше карточки -->
     <section class="admin-board" id="boardGrid">
-      <!-- сюда JS вставит new tile и карточки -->
     </section>
 
   </main>
@@ -66,8 +64,8 @@
 const $ = (id) => document.getElementById(id);
 
 let users = [];
-let editingCardEl = null;  // DOM-элемент карточки, которую заменили на форму
-let editingUser = null;    // данные пользователя для edit
+let editingCardEl = null;
+let editingUser = null;
 
 function setStatus(t){ $("status").textContent = t || ""; }
 
@@ -104,7 +102,7 @@ function escapeHtml(str){
     .replaceAll("'", "&#039;");
 }
 
-/* ---------- UI элементы ---------- */
+
 
 function createNewTile(){
   const tile = document.createElement("div");
@@ -124,7 +122,7 @@ function createNewTile(){
   return tile;
 }
 
-/* форма всегда одинаковая по виду – как поля в карточке */
+
 function createFormCard(mode, values = {}) {
   const form = document.createElement("form");
   form.className = "profile-card profile-form";
@@ -187,19 +185,18 @@ const fields = [
   return card;
 }
 
-/* ---------- Поведение: создать вместо плитки ---------- */
+
 
 function openCreateInPlace(tileEl){
-  // если уже какая-то форма открыта – закрываем
   closeAnyOpenForm();
 
   const form = createFormCard("create", {});
   tileEl.replaceWith(form);
-  editingCardEl = form;   // сейчас “форма” занимает место плитки
+  editingCardEl = form;
   editingUser = null;
 }
 
-/* ---------- Поведение: редактировать вместо карточки ---------- */
+
 
 function openEditInPlace(cardEl, u){
   closeAnyOpenForm();
@@ -207,20 +204,18 @@ function openEditInPlace(cardEl, u){
   const form = createFormCard("edit", u);
   cardEl.replaceWith(form);
 
-  editingCardEl = form;   // форма на месте конкретной карточки
+  editingCardEl = form;
   editingUser = u;
 }
 
-/* ---------- Закрытие формы (возврат на место) ---------- */
+
 
 function cancelForm(formEl){
   const mode = formEl.dataset.mode;
 
   if (mode === "create") {
-    // вернуть плитку “новый профиль” на это место
     formEl.replaceWith(createNewTile());
   } else {
-    // вернуть обратно карточку, которую редактировали
     if (editingUser) formEl.replaceWith(createProfileCard(editingUser));
   }
 
@@ -234,7 +229,7 @@ function closeAnyOpenForm(){
   cancelForm(editingCardEl);
 }
 
-/* ---------- Отправка формы ---------- */
+
 
 async function submitForm(formEl){
   const mode = formEl.dataset.mode;
@@ -254,12 +249,10 @@ async function submitForm(formEl){
   try {
     if (mode === "create") {
       await apiJson("/api/users", { method: "POST", body: JSON.stringify(data) });
-      // после создания возвращаем плитку
       formEl.replaceWith(createNewTile());
     } else {
       if (!data.password) delete data.password;
       await apiJson("/api/users/" + userId, { method: "PUT", body: JSON.stringify(data) });
-      // после редактирования возвращаем обновлённую карточку
       const updated = { ...editingUser, ...data };
       delete updated.password;
       formEl.replaceWith(createProfileCard(updated));
@@ -268,13 +261,13 @@ async function submitForm(formEl){
     editingCardEl = null;
     editingUser = null;
     setStatus("");
-    await loadUsers(true); // обновим список с сервера
+    await loadUsers(true);
   } catch (err) {
     setStatus(err.message || "Ошибка");
   }
 }
 
-/* ---------- Удаление ---------- */
+
 
 async function deleteUser(u){
   if(!confirm("Удалить профиль " + (u.fullname || "") + "?")) return;
@@ -282,41 +275,28 @@ async function deleteUser(u){
   await loadUsers(true);
 }
 
-/* ---------- Рендер всей доски ---------- */
+
 
 function renderBoard(){
   const board = $("boardGrid");
   board.innerHTML = "";
-
-  // 1 элемент – плитка “новый профиль”
   board.appendChild(createNewTile());
-
-  // остальные – карточки
   users.forEach(u => board.appendChild(createProfileCard(u)));
 }
 
 async function loadUsers(keepOpenForm = false){
   try{
     users = await apiJson("/api/users");
-
-    // если в момент обновления была открыта форма – оставляем её на месте
-    // проще всего: перерисовать всё и заново открыть форму там же не надо,
-    // поэтому keepOpenForm=false лучше. Но ты просил логику "на месте" – поэтому keepOpenForm=true
-    // делаем так: если формы нет – обычный render, если есть – не трогаем DOM.
     if (!keepOpenForm || !editingCardEl) {
       renderBoard();
       return;
     }
-
-    // если форма открыта, то обновляем только карточки вокруг:
-    // самый надёжный вариант – всё перерисовать, а форму закрыть не трогая UX
-    // но тогда форма исчезнет. Поэтому оставляем как есть – список обновится после закрытия/сохранения.
   }catch(e){
     setStatus(e.message);
   }
 }
 
-/* init */
+
 loadUsers();
 </script>
 

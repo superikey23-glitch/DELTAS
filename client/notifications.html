@@ -14,7 +14,6 @@
 <body>
 <div class="site-container">
 
-  <!-- HEADER -->
   <header class="header">
     <a href="/" class="logo-button">LTS</a>
     <p class="nav-link">Внутренний портал</p>
@@ -24,7 +23,6 @@
     </div>
   </header>
 
-  <!-- MAIN -->
   <main class="main-content">
     <div class="notifs-shell">
 
@@ -32,7 +30,6 @@
         <h1 class="notifs-title">Уведомления</h1>
       </section>
 
-      <!-- Фильтр-панель -->
       <section class="notifs-filterbar">
         <div class="notifs-filterbar-inner">
           <button type="button" class="sort-btn is-active" id="sortNewBtn">Сначала новые</button>
@@ -40,13 +37,11 @@
         </div>
       </section>
 
-      <!-- список уведомлений -->
       <section class="notifs-list" id="notifsList"></section>
 
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-column footer-left">
       <a href="img/privacy.docx" download class="privacy-link">Политика конфиденциальности</a>
@@ -72,11 +67,9 @@
 </div>
 
 <script>
-/**
- * TODO: добавить пагинацию по необходимости
- */
 
-let currentOrder = 'new'; // new | old
+
+let currentOrder = 'new';
 
 const notifsList = document.getElementById('notifsList');
 const sortNewBtn = document.getElementById('sortNewBtn');
@@ -116,12 +109,9 @@ function setActiveSort(order) {
 }
 
 async function fetchNotifications() {
-  // если у тебя сессия/куки — credentials оставляем включённым
   const res = await fetch(`/api/notifications?order=${encodeURIComponent(currentOrder)}`, {
     credentials: 'include'
   });
-
-  // если потом добавишь авторизацию — можно редиректить на /login
   if (res.status === 401) {
     location.href = '/login';
     return [];

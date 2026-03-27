@@ -1,6 +1,6 @@
-/* admin_profiles.css – frame 567765 */
 
-/* Заголовок */
+
+
 .page-title-section {
   margin: 28px 0 18px;
 }
@@ -21,17 +21,17 @@
   font-size: 14px;
 }
 
-/* Сетка 2×N */
+
 .admin-board {
   display: grid;
   grid-template-columns: repeat(2, 458px);
-  column-gap: 59px; /* как в фигме */
-  row-gap: 78px;    /* как в фигме */
+  column-gap: 59px; 
+  row-gap: 78px;    
   justify-content: center;
   margin: 26px 0 42px;
 }
 
-/* Карточка профиля */
+
 .profile-card {
   width: 458px;
   height: 541px;
@@ -44,7 +44,7 @@
   flex-direction: column;
 }
 
-/* Поле (и в карточке, и в форме – одинаковое) */
+
 .profile-field {
   width: 391.48px;
   height: 55.318px;
@@ -66,7 +66,7 @@
   margin: 0 auto 16px;
 }
 
-/* Инпуты формы выглядят как те же поля */
+
 .profile-input {
   display: block;
   justify-content: unset;
@@ -85,7 +85,7 @@
   box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.18);
 }
 
-/* Кнопки в карточке */
+
 .profile-actions {
   display: flex;
   gap: 17px;
@@ -119,7 +119,7 @@
   background: #E92F00;
 }
 
-/* Плитка “новый профиль” */
+
 .new-profile-card {
   width: 458px;
   height: 541px;
@@ -176,16 +176,16 @@
   text-transform: lowercase;
 }
 
-/* Адаптив */
+
 @media (max-width: 1040px) {
   .admin-board {
     grid-template-columns: 458px;
     row-gap: 40px;
   }
 }
-/* Отмена — как в задачах и документах, но ширина 158px */
+
 .profile-btn.cancel {
-  width: 158px;              /* ← твое требование */
+  width: 158px;              
   background: #FFFFFF;
   border: 2px solid #EAB308;
   color: #EAB308;
@@ -391,7 +391,7 @@
   }
 }
 
-/* ===== FOOTER (как на остальных страницах) ===== */
+
 @media (max-width: 1199px){
   .footer-column,
   .footer-right{

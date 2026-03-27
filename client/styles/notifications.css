@@ -1,4 +1,4 @@
-/* ===== NOTIFICATIONS PAGE ===== */
+
 
 .notifs-shell{
   width: 100%;
@@ -8,7 +8,7 @@
   padding: 0 0 40px;
 }
 
-/* Заголовок */
+
 .notifs-title-section{
   width: 100%;
   display: flex;
@@ -26,14 +26,14 @@
   margin: 0;
 }
 
-/* Жёлтая полоса фильтра */
+
 .notifs-filterbar{
   width: auto;
   align-self: stretch;
   margin-left: -24px;
   margin-right: -24px;
   background: #FEF9C3;
-  border-top: 3px solid #FEF08A;   /* сделал толще */
+  border-top: 3px solid #FEF08A;   
   border-bottom: 3px solid #FEF08A;
   padding: 14px 0;
 }
@@ -78,7 +78,7 @@
   padding: 34px 0 10px;
 }
 
-/* Карточка уведомления (1102x325) */
+
 .notif-card{
   width: 100%;
   background: #FEF9C3;
@@ -88,7 +88,7 @@
   padding: 22px 32px;
 }
 
-/* верх: заголовок + дата */
+
 .notif-top{
   width: 100%;
   display: grid;
@@ -136,7 +136,7 @@
   color: #334230;
 }
 
-/* текст */
+
 .notif-bodybox{
   width: 100%;
   min-height: 107px;
@@ -156,15 +156,15 @@
   margin-bottom: 24px;
 
 
-  white-space: pre-wrap;      /* сохраняет переносы Enter */
-  overflow-wrap: break-word;  /* переносит длинные слова */
-  word-break: break-word;     /* страхует от вылезания */
+  white-space: pre-wrap;      
+  overflow-wrap: break-word;  
+  word-break: break-word;     
 
 
 
 }
 
-/* кнопки */
+
 .notif-actions{
   width: 100%;
   display: grid;
@@ -205,7 +205,7 @@
   line-height: 19px;
 }
 
-/* пусто */
+
 .notifs-empty{
   width: 100%;
   background: #FEF9C3;
@@ -217,7 +217,7 @@
   color: #334230;
 }
 
-/* ===== ADAPTIVE ===== */
+
 @media (max-width: 1199px){
   .footer-column,
   .footer-right{
@@ -552,7 +552,7 @@
   }
 }
 
-/* footer-nav - как на странице documents */
+
 @media (max-width: 1199px) and (min-width: 901px){
   .footer-nav{
     display: flex;

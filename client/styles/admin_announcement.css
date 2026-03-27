@@ -1,4 +1,4 @@
-/* Заголовок */
+
 .aa-page-title{
   margin: 40px auto 50px;
   text-align: center;
@@ -11,7 +11,7 @@
   color: #374151;
 }
 
-/* Плашка 935x331 */
+
 .aa-panel{
   width: 935px;
   height: 331px;
@@ -27,7 +27,7 @@
   align-items: center;
 }
 
-/* Заголовок внутри */
+
 .aa-panel-title{
   margin: 26px 0 18px;
   width: 555px;
@@ -46,7 +46,7 @@
   color: #CA9345;
 }
 
-/* Поле текста 880.24x154 */
+
 .aa-textbox{
   width: 880.24px;
   height: 154px;
@@ -62,7 +62,7 @@
   padding: 0 24px;
 }
 
-/* Текст (режим просмотра): перенос даже без пробелов + максимум 5 строк */
+
 .aa-text{
   margin: 0;
   width: 816.66px;
@@ -75,18 +75,18 @@
   color: #334230;
   text-align: center;
 
-  white-space: pre-wrap;      /* ← ВАЖНО */
+  white-space: pre-wrap;      
   overflow-wrap: anywhere;
   word-break: break-word;
 
-  max-height: 120px;          /* 5 строк × 24px */
+  max-height: 120px;          
   overflow: hidden;
 }
 
-/* Текст (режим редактирования): тоже 5 строк по высоте */
+
 .aa-textarea{
   width: 816.66px;
-  height: 120px; /* 5 строк * 24px = 120 */
+  height: 120px; 
   max-height: 120px;
 
   font-family: 'Inter', sans-serif;
@@ -106,7 +106,7 @@
   word-break: break-word;
 }
 
-/* Кнопки */
+
 .aa-actions{
   margin-top: 18px;
   display: flex;
@@ -149,7 +149,7 @@
   color: #EAB308;
 }
 
-/* Статус */
+
 .aa-status{
   margin: 12px 0 0;
   font-family: 'Inter', sans-serif;
@@ -159,13 +159,13 @@
   min-height: 18px;
 }
 
-/* Когда статус пустой, не оставляем лишнее пространство снизу панели. */
+
 .aa-status:empty{
   margin-top: 0;
   min-height: 0;
 }
 
-/* Адаптив */
+
 @media (max-width: 1024px){
   .aa-page-title{
     margin: 28px auto 32px;
@@ -203,7 +203,7 @@
   }
 
   .aa-text{
-    max-height: 110px; /* 5 строк × 22px */
+    max-height: 110px; 
   }
 
   .aa-textarea{
@@ -244,7 +244,7 @@
   }
 
   .aa-text{
-    max-height: 100px; /* 5 строк × 20px */
+    max-height: 100px; 
   }
 
   .aa-textarea{
@@ -283,7 +283,7 @@
   }
 
   .aa-text{
-    max-height: 90px; /* 5 строк × 18px */
+    max-height: 90px; 
   }
 
   .aa-textarea{
