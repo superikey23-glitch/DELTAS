@@ -64,6 +64,20 @@ const adminPagePaths = [
   '/admin_profiles.html'
 ];
 
+const userPagePaths = [
+  '/index.html',
+  '/tasks',
+  '/tasks.html',
+  '/documents',
+  '/documents.html',
+  '/profile',
+  '/profile.html',
+  '/notifications',
+  '/notifications.html',
+  '/contacts',
+  '/contacts.html'
+];
+
 function mapUser(row) {
   if (!row) return null;
   return {
@@ -244,6 +258,7 @@ async function checkAdminPageAccess(req, res, next) {
 }
 
 app.use(adminPagePaths, checkAdminPageAccess);
+app.use(userPagePaths, checkPageAuth);
 app.use(express.static(clientPath));
 
 function generateToken() {
@@ -752,14 +767,8 @@ async function checkPageAuth(req, res, next) {
   }
 }
 
-app.use(['/tasks', '/documents', '/profile'], checkPageAuth);
-
-app.get('/', (req, res) => {
-  if (req.user) {
-    res.sendFile(path.join(clientPath, 'index.html'));
-  } else {
-    res.redirect('/login');
-  }
+app.get('/', checkPageAuth, (req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
 });
 
 app.get('/tasks', (req, res) => {
@@ -768,6 +777,14 @@ app.get('/tasks', (req, res) => {
 
 app.get('/documents', (req, res) => {
   res.sendFile(path.join(clientPath, 'documents.html'));
+});
+
+app.get('/notifications', (req, res) => {
+  res.sendFile(path.join(clientPath, 'notifications.html'));
+});
+
+app.get('/contacts', (req, res) => {
+  res.sendFile(path.join(clientPath, 'contacts.html'));
 });
 
 app.get('/login', (req, res) => {
@@ -934,13 +951,9 @@ app.put('/api/admin/announcement', requireAuth, requireRole('admin'), async (req
   }
 });
 
-app.use(['/tasks', '/documents', '/profile', '/admin_announcement'], checkPageAuth);
-
 app.get('/admin_announcement', (req, res) => {
   res.sendFile(path.join(clientPath, 'admin_announcement.html'));
 });
-
-app.use(['/admin_documents'], checkPageAuth);
 
 app.get('/admin_documents', (req, res) => {
   res.sendFile(path.join(clientPath, 'admin_documents.html'));
@@ -1225,7 +1238,7 @@ app.use((req, res) => {
 async function start() {
   try {
     await pool.query('SELECT 1');
-    console.log('✅ PostgreSQL подключен');
+    console.log('PostgreSQL подключен');
 
     app.listen(PORT, HOST, () => {
       console.log(`Сервер готов http://localhost:${PORT}`);
@@ -1239,7 +1252,7 @@ async function start() {
       }
     });
   } catch (err) {
-    console.error('❌ Ошибка запуска:', err);
+    console.error('Ошибка запуска:', err);
     process.exit(1);
   }
 }
